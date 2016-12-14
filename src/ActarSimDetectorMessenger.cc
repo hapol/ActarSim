@@ -182,6 +182,14 @@ ActarSimDetectorMessenger(ActarSimDetectorConstruction* ActarSimDet)
   sciGeoIncludedFlagCmd->SetCandidates("on off");
   sciGeoIncludedFlagCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  exogamGeoIncludedFlagCmd = new G4UIcmdWithAString("/ActarSim/det/exogamGeoIncludedFlag",this);
+  exogamGeoIncludedFlagCmd->SetGuidance("Includes the geometry of the exogam in the simulation (default off).");
+  exogamGeoIncludedFlagCmd->SetGuidance("  Choice : on, off(default)");
+  exogamGeoIncludedFlagCmd->SetParameterName("choice",true);
+  exogamGeoIncludedFlagCmd->SetDefaultValue("off");
+  exogamGeoIncludedFlagCmd->SetCandidates("on off");
+  exogamGeoIncludedFlagCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   mediumMaterialCmd = new G4UIcmdWithAString("/ActarSim/det/setMediumMat",this);
   mediumMaterialCmd->SetGuidance("Select Material outside the Chamber.");
   mediumMaterialCmd->SetParameterName("mediumMat",false);

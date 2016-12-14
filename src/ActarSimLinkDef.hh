@@ -12,6 +12,7 @@
 #pragma link C++ class ActarSimSciHit;
 #pragma link C++ class ActarSimSciRingHit;
 #pragma link C++ class ActarSimPlaHit;
+#pragma link C++ class ActarSimExogamHit;
 #pragma link C++ class ActarSimPrimaryInfo;
 #pragma link C++ class ActarSimBeamInfo;
 

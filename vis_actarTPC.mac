@@ -54,8 +54,8 @@
 #/ActarSim/phys/addPhysics ion-LowE-ziegler2000
 #/ActarSim/phys/addPhysics ion-standard
 #/ActarSim/phys/addPhysics penelope
-#/ActarSim/phys/addPhysics emstandard_opt0
-/ActarSim/phys/addPhysics emstandard_opt3
+/ActarSim/phys/addPhysics emstandard_opt0
+#/ActarSim/phys/addPhysics emstandard_opt3
 #/ActarSim/phys/addPhysics emstandard_opt4
 #/ActarSim/phys/addPhysics ionGasModels
 #
@@ -130,6 +130,8 @@
 #/ActarSim/det/sci/zBoxHalfLength 150. mm        #Sets the z half length of the scintillator detectors box
 #/ActarSim/det/sci/print                         #Prints geometry
 #
+# EXOGAM DETECTOR (valid if /ActarSim/det/exogamGeoIncludedFlag on has been settled)
+/ActarSim/det/exogamGeoIncludedFlag on
 # Update is MANDATORY after any material, field or detector change
 /ActarSim/det/update                             #Updates geometry
 #/ActarSim/det/print                              #Prints geometry

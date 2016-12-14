@@ -31,12 +31,14 @@ class ActarSimSilRingSD;
 class ActarSimSciSD;
 class ActarSimSciRingSD;
 class ActarSimPlaSD;
+class ActarSimExogamSD;
 class ActarSimGasDetectorConstruction;
 class ActarSimSilDetectorConstruction;
 class ActarSimSilRingDetectorConstruction;
 class ActarSimSciDetectorConstruction;
 class ActarSimSciRingDetectorConstruction;
 class ActarSimPlaDetectorConstruction;
+class ActarSimExogamDetectorConstruction;
 
 class ActarSimDetectorConstruction : public G4VUserDetectorConstruction {
 private:
@@ -46,6 +48,7 @@ private:
   ActarSimSciSD* sciSD;          ///< Pointer to scintillator sensitive detector
   ActarSimSciRingSD* sciRingSD;  ///< Pointer to scintillator ring sensitive detector
   ActarSimPlaSD* plaSD;          ///< Pointer to plastic sensitive detector
+  ActarSimExogamSD* exogamSD;    ///< Pointer to exogam sensitive detector
 
   G4Box* solidWorld;
 
@@ -92,6 +95,7 @@ private:
   G4String gasGeoIncludedFlag;          ///< Control variable for including a gas volume
   G4String silGeoIncludedFlag;          ///< Control variable for including the silicons
   G4String sciGeoIncludedFlag;          ///< Control variable for including the scintillators
+  G4String exogamGeoIncludedFlag;       ///< Control variable for including Exogam
   G4String SpecMATGeoIncludedFlag;      ///< Control variable for including SpecMAT
   G4String OthersGeoIncludedFlag;       ///< Control variable for including other geometries
 
@@ -101,6 +105,7 @@ private:
   ActarSimSciDetectorConstruction* sciDet;          ///< Pointer to scintillator constructor
   ActarSimSciRingDetectorConstruction* sciRingDet;  ///< Pointer to sciRing for MAIKO constructor
   ActarSimPlaDetectorConstruction* plaDet;          ///< Pointer to Hodoscope constructor
+  ActarSimExogamDetectorConstruction* exogamDet;    ///< Pointer to Exogam constructor
 
   ActarSimDetectorMessenger* detectorMessenger;  ///< Pointer to the Messenger
 
@@ -145,6 +150,7 @@ public:
   void SetGasGeoIncludedFlag(G4String val){gasGeoIncludedFlag=val;}
   void SetSilGeoIncludedFlag(G4String val){silGeoIncludedFlag=val;}
   void SetSciGeoIncludedFlag(G4String val){sciGeoIncludedFlag=val;}
+  void SetExogamGeoIncludedFlag(G4String val){exogamGeoIncludedFlag=val;}
 
   ActarSimGasSD* GetGasSD(void){return gasSD;}
   ActarSimSilSD* GetSilSD(void){return silSD;}
@@ -152,6 +158,7 @@ public:
   ActarSimSciSD* GetSciSD(void){return sciSD;}
   ActarSimSciRingSD* GetSciRingSD(void){return sciRingSD;}
   ActarSimPlaSD* GetPlaSD(void){return plaSD;}
+  ActarSimExogamSD* GetExogamSD(void){return exogamSD;}
 
   ActarSimDetectorMessenger* GetDetectorMessenger(){return detectorMessenger;};
 
@@ -182,6 +189,7 @@ public:
   ActarSimSciDetectorConstruction* GetSciDetector() {return sciDet;}
   ActarSimSciRingDetectorConstruction* GetSciRingDetector() {return sciRingDet;}
   ActarSimPlaDetectorConstruction* GetPlaDetector() {return plaDet;}
+  ActarSimExogamDetectorConstruction* GetExogamDetector() {return exogamDet;}
 
   G4String GetMaikoGeoIncludedFlag(void){return MaikoGeoIncludedFlag;}
   G4String GetACTARTPCDEMOGeoIncludedFlag(void){return ACTARTPCDEMOGeoIncludedFlag;}

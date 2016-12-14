@@ -48,6 +48,7 @@ private:
   G4UIcmdWithAString* gasGeoIncludedFlagCmd;          ///< Includes the geometry of the gas volume in the simulation (default on).
   G4UIcmdWithAString* silGeoIncludedFlagCmd;          ///< Includes the geometry of the silicons in the simulation (default off).
   G4UIcmdWithAString* sciGeoIncludedFlagCmd;          ///< Includes the geometry of the scintillator in the simulation (default off).
+  G4UIcmdWithAString* exogamGeoIncludedFlagCmd;       ///< Includes the geometry of the exogam in the simulation (default off).
 
   G4UIcmdWithAString*        mediumMaterialCmd;       ///< Select Material outside the Chamber.
   G4UIcmdWithAString*        chamberMaterialCmd;      ///< Select Material in the Chamber (but not in the gas!).

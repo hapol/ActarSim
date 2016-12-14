@@ -20,6 +20,7 @@
 #include "ActarSimSciDetectorConstruction.hh"
 #include "ActarSimSciRingDetectorConstruction.hh"
 #include "ActarSimPlaDetectorConstruction.hh"
+#include "ActarSimExogamDetectorConstruction.hh"
 
 #include "ActarSimGasSD.hh"
 #include "ActarSimSilSD.hh"
@@ -27,6 +28,7 @@
 #include "ActarSimSciSD.hh"
 #include "ActarSimSciRingSD.hh"
 #include "ActarSimPlaSD.hh"
+#include "ActarSimExogamSD.hh"
 
 #include "ActarSimROOTAnalysis.hh"
 
@@ -49,15 +51,15 @@
 //////////////////////////////////////////////////////////////////
 /// Constructor: initialize all variables, materials and pointers
 ActarSimDetectorConstruction::ActarSimDetectorConstruction()
-  :   gasSD(0), silSD(0), silRingSD(0), sciSD(0),sciRingSD(0),plaSD(0),
+  :   gasSD(0), silSD(0), silRingSD(0), sciSD(0),sciRingSD(0),plaSD(0), exogamSD(0),
       solidWorld(0), worldLog(0), chamberLog(0), AlplateLog(0), DiamondLog(0), SupportLog(0),
   worldPhys(0), chamberPhys(0), AlplatePhys(0), DiamondPhys(0), SupportPhys(0),
   mediumMaterial(0), defaultMaterial(0), chamberMaterial(0), windowMaterial(0),
   emField(0), MaikoGeoIncludedFlag("off"),
   ACTARTPCDEMOGeoIncludedFlag("off"), ACTARTPCGeoIncludedFlag("off"),
-  gasGeoIncludedFlag("on"), silGeoIncludedFlag("off"), sciGeoIncludedFlag("off"),
+  gasGeoIncludedFlag("on"), silGeoIncludedFlag("off"), sciGeoIncludedFlag("off"), exogamGeoIncludedFlag("on"),
   SpecMATGeoIncludedFlag("off"), OthersGeoIncludedFlag("off"),
-  gasDet(0), silDet(0),silRingDet(0), sciDet(0), sciRingDet(0), plaDet(0) {
+  gasDet(0), silDet(0),silRingDet(0), sciDet(0), sciRingDet(0), plaDet(0), exogamDet(0) {
   //default values of half-length -> size of World (2x2x2 m3)
   worldSizeX = 1.*m;
   worldSizeY = 1.*m;
@@ -94,6 +96,10 @@ ActarSimDetectorConstruction::ActarSimDetectorConstruction()
   G4String plaSDname = "plaSD";
   plaSD = new ActarSimPlaSD( plaSDname );
   SDman->AddNewDetector( plaSD );
+  // exogam volume sensitive detector
+  G4String exogamSDname = "exogamSD";
+  exogamSD = new ActarSimExogamSD( exogamSDname );
+  SDman->AddNewDetector( exogamSD );
 
   //define default materials and set medium, default, chamber, window default materials
   DefineMaterials();
@@ -112,6 +118,7 @@ ActarSimDetectorConstruction::ActarSimDetectorConstruction()
   sciDet = new ActarSimSciDetectorConstruction(this);
   sciRingDet = new ActarSimSciRingDetectorConstruction(this);
   plaDet = new ActarSimPlaDetectorConstruction(this);
+  exogamDet = new ActarSimExogamDetectorConstruction(this);
 
   // create commands for interactive definition of the detector
   detectorMessenger = new ActarSimDetectorMessenger(this);
@@ -127,6 +134,7 @@ ActarSimDetectorConstruction::~ActarSimDetectorConstruction() {
   if (sciDet     != NULL) delete sciDet;
   if (sciRingDet != NULL) delete sciRingDet;
   if (plaDet     != NULL) delete plaDet;
+  if (exogamDet  != NULL) delete exogamDet;
   /*
     if (gasSD      != NULL) delete gasSD;
     if (silSD      != NULL) delete silSD;
@@ -284,9 +292,10 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   //Chamber half-lengths are (150, 105, 150)mm,
   //also selectable using /ActarSim/det/setXLengthGasChamber... in the macros
   //Last sentence is not true if chamberSizeX,Y,Z are reinitialized here - T.M. Feb 2016
-  chamberSizeX = 200.*mm;
+  //Increased chamber size to hold Exogam inside - P.C. Dec 2016
+  chamberSizeX = 400.*mm;
   chamberSizeY = 105.*mm;
-  chamberSizeZ = 200.*mm;
+  chamberSizeZ = 400.*mm;
 
   //Chamber X,Y,Z Center
   chamberCenterX = 0.*m;
@@ -350,6 +359,12 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   //--------------------------
   if(sciGeoIncludedFlag=="on")
     sciDet->Construct(chamberLog);
+
+  //--------------------------
+  // Exogam volume
+  //--------------------------
+  if(exogamGeoIncludedFlag=="on")
+    exogamDet->Construct(chamberLog);
 
   //--------------------------
   // Histogramming

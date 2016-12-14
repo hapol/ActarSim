@@ -104,6 +104,7 @@ set(ActarSim_HEADERS ${PROJECT_SOURCE_DIR}/include/ActarSimData.hh
 		     ${PROJECT_SOURCE_DIR}/include/ActarSimSciHit.hh
 		     ${PROJECT_SOURCE_DIR}/include/ActarSimSciRingHit.hh
 		     ${PROJECT_SOURCE_DIR}/include/ActarSimPlaHit.hh
+		     ${PROJECT_SOURCE_DIR}/include/ActarSimExogamHit.hh
 		     ${PROJECT_SOURCE_DIR}/include/ActarSimPrimaryInfo.hh
 		     ${PROJECT_SOURCE_DIR}/include/ActarSimBeamInfo.hh
 		     )
