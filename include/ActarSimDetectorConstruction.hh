@@ -101,6 +101,7 @@ private:
   ActarSimSciDetectorConstruction* sciDet;          ///< Pointer to scintillator constructor
   ActarSimSciRingDetectorConstruction* sciRingDet;  ///< Pointer to sciRing for MAIKO constructor
   ActarSimPlaDetectorConstruction* plaDet;          ///< Pointer to Hodoscope constructor
+  ActarSimSpecMATSciDetectorConstruction* SpecMATSciDet; ///< Pointer to SpecMAT Scintillator constructor
 
   ActarSimDetectorMessenger* detectorMessenger;  ///< Pointer to the Messenger
 
@@ -182,6 +183,7 @@ public:
   ActarSimSciDetectorConstruction* GetSciDetector() {return sciDet;}
   ActarSimSciRingDetectorConstruction* GetSciRingDetector() {return sciRingDet;}
   ActarSimPlaDetectorConstruction* GetPlaDetector() {return plaDet;}
+  ActarSimSpecMATSciDetectorConstruction* GetSpecMATSciDetector() {return SpecMATSciDet;}
 
   G4String GetMaikoGeoIncludedFlag(void){return MaikoGeoIncludedFlag;}
   G4String GetACTARTPCDEMOGeoIncludedFlag(void){return ACTARTPCDEMOGeoIncludedFlag;}

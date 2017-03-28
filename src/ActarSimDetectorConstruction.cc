@@ -20,6 +20,7 @@
 #include "ActarSimSciDetectorConstruction.hh"
 #include "ActarSimSciRingDetectorConstruction.hh"
 #include "ActarSimPlaDetectorConstruction.hh"
+#include "ActarSimSpecMATSciDetectorConstruction.hh"
 
 #include "ActarSimGasSD.hh"
 #include "ActarSimSilSD.hh"
@@ -57,7 +58,7 @@ ActarSimDetectorConstruction::ActarSimDetectorConstruction()
   ACTARTPCDEMOGeoIncludedFlag("off"), ACTARTPCGeoIncludedFlag("off"),
   gasGeoIncludedFlag("on"), silGeoIncludedFlag("off"), sciGeoIncludedFlag("off"),
   SpecMATGeoIncludedFlag("off"), OthersGeoIncludedFlag("off"),
-  gasDet(0), silDet(0),silRingDet(0), sciDet(0), sciRingDet(0), plaDet(0) {
+  gasDet(0), silDet(0),silRingDet(0), sciDet(0), sciRingDet(0), plaDet(0),SpecMATSciDet(0) {
   //default values of half-length -> size of World (2x2x2 m3)
   worldSizeX = 1.*m;
   worldSizeY = 1.*m;
@@ -112,6 +113,7 @@ ActarSimDetectorConstruction::ActarSimDetectorConstruction()
   sciDet = new ActarSimSciDetectorConstruction(this);
   sciRingDet = new ActarSimSciRingDetectorConstruction(this);
   plaDet = new ActarSimPlaDetectorConstruction(this);
+  SpecMATSciDet = new ActarSimSpecMATSciDetectorConstruction(this);
 
   // create commands for interactive definition of the detector
   detectorMessenger = new ActarSimDetectorMessenger(this);
@@ -127,6 +129,7 @@ ActarSimDetectorConstruction::~ActarSimDetectorConstruction() {
   if (sciDet     != NULL) delete sciDet;
   if (sciRingDet != NULL) delete sciRingDet;
   if (plaDet     != NULL) delete plaDet;
+  if (SpecMATSciDet!= NULL) delete SpecMATSciDet;
   /*
     if (gasSD      != NULL) delete gasSD;
     if (silSD      != NULL) delete silSD;
@@ -612,6 +615,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPCDEMO() {
 ///   B-The scattering chamber is .... still to be defined (tube or hexagonal prism)
 ///
 ///   C-Hard-coded Sub-volumes and ancillaries:
+///       SpecMATSciDet: set of BrCe detectors from O. Poleshchuk
 ///
 ///   D-Optional sub-volumes and ancillaries:
 ///     -Gas volume (see ActarSimGasDetectorConstruction)
@@ -624,6 +628,10 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   //--------------------------
   //World Volume
   //--------------------------
+  //Geometrical definition of the world, half sizes
+  SetWorldSizeX(1.0*m);
+  SetWorldSizeY(1.0*m);
+  SetWorldSizeZ(1.0*m);
 
   solidWorld = new G4Box("World",                //its name
 			 worldSizeX,worldSizeY,worldSizeZ);  //its size
@@ -651,6 +659,8 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   //--------------------------
   //Array of scintillation detectors
   //--------------------------
+  if(GeoIncludedFlag=="on")
+    SpecMATSciDet->Construct(chamberLog);
 
   return worldPhys;
 }
@@ -1011,6 +1021,7 @@ void ActarSimDetectorConstruction::DefineMaterials() {
   G4Element* Na = new G4Element("Sodium"   ,"Na", z=11., a=  22.98977*g/mole);
   G4Element* S  = new G4Element("Sulphur"  ,"S",  z=16., a=    32.066*g/mole);
   G4Element* Ar = new G4Element("Argon"    ,"Ar", z=18., a=   39.9481*g/mole);
+  G4Element* Ti = new G4Element("Titanium" ,"Ti", z=22., a=      47.9*g/mole);
   G4Element* Zn = new G4Element("Zinc",     "Zn", z=30., a=     65.39*g/mole);
   G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=     72.61*g/mole);
   G4Element* Br = new G4Element("Bromine"  ,"Br", z=35., a=    79.904*g/mole);
@@ -1025,7 +1036,6 @@ void ActarSimDetectorConstruction::DefineMaterials() {
   G4Element* W  = new G4Element("Tungsten" ,"W" , z=74., a=    183.84*g/mole);
   G4Element* Pb = new G4Element("Lead"     ,"Pb", z=82., a=    207.20*g/mole);
   G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98038*g/mole);
-
   //
   // define materials
   //
@@ -1169,6 +1179,17 @@ void ActarSimDetectorConstruction::DefineMaterials() {
   PWO->AddElement(Pb, natoms=1);
   PWO->AddElement(W, natoms=1);
   PWO->AddElement(O, natoms=4);
+
+  G4Material* CeBr3=
+    new G4Material("CeBr3",density= 5.1*g/cm3,ncomponents=2);
+  CeBr3->AddElement(Ce, natoms=1);
+  CeBr3->AddElement(Br, natoms=3);
+
+  // SpecMAT Reflector (white powder TiO2) material and its compounds
+  G4Material* TiO2=
+	  new G4Material("TiO2",density= 4.23*g/cm3,ncomponents=2);
+  TiO2->AddElement(Ti, natoms=1);
+  TiO2->AddElement(O, natoms=2);
 
   //Mylar
   G4Material* mylar=new G4Material("Mylar",density= 1.4*g/cm3,ncomponents=3);
