@@ -7,6 +7,7 @@
 /gui/addMenu g4file G4File
 /gui/addButton g4file vis_actarTPCDEMO "/control/execute vis_actarTPCDEMO.mac"
 /gui/addButton g4file vis_actarTPC "/control/execute vis_actarTPC.mac"
+/gui/addButton g4file vis_SpecMAT "/control/execute vis_SpecMAT.mac"
 /gui/addButton g4file vis_alpha "/control/execute vis_alpha.mac"
 /gui/addButton g4file vis_maiko "/control/execute vis_maiko.mac"
 /gui/addButton g4file vis_kine "/control/execute vis_kine.mac"
@@ -43,7 +44,7 @@
 
 # Gun menu :
 /gui/addMenu gun Gun
-/gui/addButton gun "Beam (particle)" /ActarSim/gun/particle 
+/gui/addButton gun "Beam (particle)" /ActarSim/gun/particle
 /gui/addButton gun "Beam (ion)" /ActarSim/gun/ion
 #/gui/addButton gun "proton" /ActarSim/gun/ion 1 1 1 0.0 1.00782503207
 #/gui/addButton gun "alpha" /ActarSim/gun/ion 2 4 2 0.0 4.00260325415

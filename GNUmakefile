@@ -87,7 +87,7 @@ ifeq ($(UNAME_S),Linux)
 LDSHAREDFLAGS= -Wl,-soname, -shared -o
 endif
 ifeq ($(UNAME_S),Darwin)
-LDSHAREDFLAGS= -dynamiclib -single_module -undefined dynamic_lookup -o 
+LDSHAREDFLAGS= -dynamiclib -single_module -undefined dynamic_lookup -o
 endif
 
 #LDSHAREDFLAGS   = -g
@@ -110,5 +110,3 @@ $(SHAREDLIB):
 ##$(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
 		chmod 555 $(SHAREDLIB)
 		echo "done for $(UNAME_S)"
-
-

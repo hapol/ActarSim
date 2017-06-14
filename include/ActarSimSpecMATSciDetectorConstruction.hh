@@ -21,15 +21,20 @@ class ActarSimDetectorConstruction;
 
 class ActarSimSpecMATSciDetectorConstruction {
 private:
-  G4Material* sciSpecMATMaterial;     ///< Pointer to the material the SpecMAT scintillator is made of
-  G4Material* windowSpecMATMaterial;  ///< Pointer to the material the SpecMAT scintillator window is made of
-  G4Material* reflectorSpecMATMaterial;  ///< Pointer to the material the SpecMAT scintillator reflector is made of
+  G4Material* sciSpecMATMaterial;      ///< Pointer to the material the SpecMAT scintillator is made of
+  G4Material* windowSpecMATMaterial;   ///< Pointer to the material the SpecMAT scintillator window is made of
+  G4Material* reflectorSpecMATMaterial;///< Pointer to the material the SpecMAT scintillator reflector is made of
   G4Material* housingSpecMATMaterial;  ///< Pointer to the material the SpecMAT scintillator housing is made of
+  G4Material* vacuumFlangeSpecMATMaterial;  ///< Pointer to the material the SpecMAT scintillator vacuum flange is made of
+  G4Material* insulationTubeSpecMATMaterial; ///< Pointer to the material the SpecMAT scintillator insulator is made of
 
-  ActarSimSpecMATSciDetectorMessenger* sciSpecMATMessenger;    ///< Pointer to the Messenger
+  ActarSimSpecMATSciDetectorMessenger* sciMessenger;    ///< Pointer to the Messenger
   ActarSimDetectorConstruction* detConstruction; ///< Pointer to the global detector
 
   /////////////COPIED - CHECK THEM
+  G4String vacuumChamber;
+  G4String insulationTube;
+
   G4int nbSegments;
   G4int nbCrystInSegmentRow;
   G4int nbCrystInSegmentColumn;
@@ -80,9 +85,17 @@ private:
   G4double sciHousPosY;
   G4double sciHousPosZ;
 
+  G4double insulationTubeThickness;
+
+  G4double vacuumFlangeSizeX;
+  G4double vacuumFlangeSizeY;
+  G4double vacuumFlangeSizeZ;
+
+  G4double vacuumFlangeThickFrontOfScint;
+
   //////////////////////////
 
-  G4VPhysicalVolume* ConstructSpecMATSci(G4LogicalVolume*);
+  G4VPhysicalVolume* ConstructSci(G4LogicalVolume*);
 
 public:
   ActarSimSpecMATSciDetectorConstruction(ActarSimDetectorConstruction*);
@@ -90,10 +103,12 @@ public:
 
   G4VPhysicalVolume* Construct(G4LogicalVolume*);
 
-  void SetSpecMATSciMaterial (G4String);
+  void SetSciSpecMATMaterial (G4String);
   void SetReflectorSpecMATMaterial(G4String);
   void SetWindowSpecMATMaterial(G4String);
   void SetHousingSpecMATMaterial(G4String);
+  void SetVacuumFlangeSpecMATMaterial(G4String);
+  void SetInsulationTubeSpecMATMaterial(G4String);
 
   void SetSciCrystSizeX(G4double val){sciCrystSizeX = val;}
   void SetSciCrystSizeY(G4double val){sciCrystSizeY = val;}
@@ -103,10 +118,12 @@ public:
   void SetNbCrystInSegmentRow(G4int val){nbCrystInSegmentRow = val;}
   void SetNbCrystInSegmentColumn(G4int val){nbCrystInSegmentColumn = val;}
 
-  G4Material* GetSpecMATSciMaterial() {return sciSpecMATSciMaterial;}
+  G4Material* GetSpecMATSciMaterial() {return sciSpecMATMaterial;}
   G4Material* GetReflectorSpecMATMaterial() {return reflectorSpecMATMaterial;}
   G4Material* GetWindowSpecMATMaterial() {return windowSpecMATMaterial;}
   G4Material* GetHousingSpecMATMaterial() {return housingSpecMATMaterial;}
+  G4Material* GetVacuumFlangeSpecMATMaterial() {return vacuumFlangeSpecMATMaterial;}
+  G4Material* GetInsulationTubeSpecMATMaterial() {return insulationTubeSpecMATMaterial;}
 
   G4double GetSciCrystSizeX(void){return sciCrystSizeX;}
   G4double GetSciCrystSizeY(void){return sciCrystSizeY;}
@@ -115,6 +132,11 @@ public:
   G4double GetNbSegments(void){return nbSegments;}
   G4double GetNbCrystInSegmentRow(void){return nbCrystInSegmentRow;}
   G4double GetNbCrystInSegmentColumn(void){return nbCrystInSegmentColumn;}
+
+  G4double GetInsulationTubeThickness(void){return insulationTubeThickness;}
+  G4double GetVacuumFlangeSizeX(void){return vacuumFlangeSizeX;}
+
+  G4double ComputeCircleR1();
 
   void UpdateGeometry();
   void PrintDetectorParameters();

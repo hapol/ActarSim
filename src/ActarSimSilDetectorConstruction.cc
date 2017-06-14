@@ -39,7 +39,7 @@
 ActarSimSilDetectorConstruction::
 ActarSimSilDetectorConstruction(ActarSimDetectorConstruction* det)
   :	silBulkMaterial(0),detConstruction(det) {
-  SetSilBulkMaterial("Silicon");
+  SetSilBulkMaterial("SiliconMat");
 
   //Options for Silicon and scintillator coverage:
   // 6 bits to indicate which sci wall is present (1) or absent (0)

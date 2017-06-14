@@ -147,6 +147,7 @@ add_dependencies(actarsim actar)
 set(ACTARSIM_SCRIPTS
 gui.mac
 vis_actarTPCDEMO.mac
+vis_SpecMAT.mac
 vis_actarTPC.mac
 vis_maiko.mac
 vis_kine.mac

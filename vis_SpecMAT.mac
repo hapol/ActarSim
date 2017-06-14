@@ -105,7 +105,7 @@
 #
 #
 # SILICON DETECTOR (valid if /ActarSim/det/silGeoIncludedFlag on has been settled)
-/ActarSim/det/silGeoIncludedFlag on              #Includes the geometry of the silicons in the simulation
+/ActarSim/det/silGeoIncludedFlag off              #Includes the geometry of the silicons in the simulation
 #Options for Silicon and scintillator coverage:
 # 6 bits to indicate which sci wall is present (1) or absent (0)
 # order is:

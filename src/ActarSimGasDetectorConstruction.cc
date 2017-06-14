@@ -183,6 +183,11 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
 	   << " gasMaterial: " <<  gasMaterial << G4endl;
     G4cout << "##################################################################" << G4endl;
 
+    if(detConstruction->GetSpecMATGeoIncludedFlag() == "on"){
+      //gas Tube radius mm
+      radiusGasTub = 50.*mm;
+      lengthGasTub = 100.*mm;
+    }
     //centered in (0,0,lengthGasTub) to have origin in the detector entrance
     //gasBoxCenterZ = lengthGasTub;
     gasBoxCenterZ = 0.*mm;

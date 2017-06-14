@@ -37,6 +37,7 @@ class ActarSimSilRingDetectorConstruction;
 class ActarSimSciDetectorConstruction;
 class ActarSimSciRingDetectorConstruction;
 class ActarSimPlaDetectorConstruction;
+class ActarSimSpecMATSciDetectorConstruction;
 
 class ActarSimDetectorConstruction : public G4VUserDetectorConstruction {
 private:
@@ -134,7 +135,7 @@ public:
   void SetMediumMaterial(G4String);
   void SetDefaultMaterial(G4String);
   void SetChamberMaterial(G4String);
-  void SetWindowMaterial (G4String);
+  void SetWindowMaterial(G4String);
   void SetUpdateChamberMaterial(G4Material*);
 
   void SetMaikoGeoIncludedFlag(G4String val){MaikoGeoIncludedFlag=val;}

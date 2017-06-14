@@ -1,14 +1,14 @@
-// - AUTHOR: Hector Alvarez-Pol 04/2008
+// - AUTHOR: Hector Alvarez-Pol 06/2017
 /******************************************************************
- * Copyright (C) 2005-2016, Hector Alvarez-Pol                     *
+ * Copyright (C) 2005-2017, Hector Alvarez-Pol                     *
  * All rights reserved.                                            *
  *                                                                 *
  * License according to GNU LESSER GPL (see lgpl-3.0.txt).         *
  * For the list of contributors see CREDITS.                       *
  ******************************************************************/
 
-#ifndef ActarSimSciDetectorConstruction_h
-#define ActarSimSciDetectorConstruction_h 1
+#ifndef ActarSimSpecMATSciDetectorMessenger_h
+#define ActarSimSpecMATSciDetectorMessenger_h 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
