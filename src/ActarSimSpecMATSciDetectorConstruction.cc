@@ -50,24 +50,20 @@ ActarSimSpecMATSciDetectorConstruction(ActarSimDetectorConstruction* det)
   SetHousingSpecMATMaterial("AluminiumMat");
   SetVacuumFlangeSpecMATMaterial("AluminiumMat");
   SetInsulationTubeSpecMATMaterial("Ceramic_Al2O3");
-
-  // FROM THE ORIGINAL SPECMAT CODE
-  nbSegments = 15;
-  nbCrystInSegmentRow = 3;        //# of rings
-  nbCrystInSegmentColumn = 1;     //# of crystals
   
-  vacuumChamber = "yes"; //"yes"/"no"
+  // FROM THE ORIGINAL SPECMAT CODE
+  nbSegments = 15;            //the number of scintillator segments
+  nbCrystInSegmentRow = 3;    //the number of scintillator crystals in a segment row
+  nbCrystInSegmentColumn = 1; //the number of scintillator crystals in a segment column
+  
+  SetVacuumChamberIncludedFlag("on"); //default value "on" in the SpecMAT constructor
   vacuumFlangeSizeX = 150*mm;
   vacuumFlangeSizeY = 19*mm;
   vacuumFlangeSizeZ = 10*mm;
   vacuumFlangeThickFrontOfScint = 2*mm;
   
-  insulationTube = "yes"; //"yes"/"no"
+  SetInsulationTubeIncludedFlag("on"); //default value "on" in the SpecMAT constructor
   insulationTubeThickness = 10*mm;
-  
-  dPhi = twopi/nbSegments;
-  half_dPhi = 0.5*dPhi;
-  tandPhi = std::tan(half_dPhi);
   
   //****************************************************************************//
   //**************** CeBr3 cubic scintillator 1.5"x1.5"x1.5" *******************//
@@ -86,6 +82,24 @@ ActarSimSpecMATSciDetectorConstruction(ActarSimDetectorConstruction* det)
   sciCrystPosY = 0;       //Position of the Crystal along the Y axis
   sciCrystPosZ = 0;       //Position of the Crystal along the Z axis
   
+  // Thickness of reflector walls
+  sciReflWallThickX = 0.5*mm;
+  sciReflWallThickY = 0.5*mm;
+  sciReflWindThick = 0.5*mm;
+  
+  //--------------------------------------------------------//
+  //******************** Aluminum Housing ******************//
+  //--------------------------------------------------------//
+  // Dimensions of Housing (half-side)
+  sciHousWallThickX = 3.0*mm;
+  sciHousWallThickY = 3.0*mm;
+  sciHousWindThick = 1.0*mm;
+
+  // Outer dimensions of the housing relative to the crystal size and to the thickness of the reflector
+  sciHousSizeX = sciCrystSizeX + sciReflWallThickX + sciHousWallThickX;
+  sciHousSizeY = sciCrystSizeY + sciReflWallThickY + sciHousWallThickY;
+  sciHousSizeZ = sciCrystSizeZ + sciReflWindThick/2 + sciHousWindThick/2;
+ 
   // create commands for interactive definition of the calorimeter
   sciMessenger = new ActarSimSpecMATSciDetectorMessenger(this);
 }
@@ -115,27 +129,22 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   G4LogicalVolume* sciCrystLog = new G4LogicalVolume(sciCrystSolid,sciSpecMATMaterial,"crystal");
   G4VPhysicalVolume* sciCrysPhys;
 
-  // Thickness of reflector walls
-  sciReflWallThickX = 0.5*mm;
-  sciReflWallThickY = 0.5*mm;
-  sciReflWindThick = 0.5*mm;
-  
   // Outer dimensions of the reflector relative to the crystal size
-  sciReflSizeX = sciCrystSizeX + sciReflWallThickX;
-  sciReflSizeY = sciCrystSizeY + sciReflWallThickY;
-  sciReflSizeZ = sciCrystSizeZ + sciReflWindThick/2;
+  G4double sciReflSizeX = sciCrystSizeX + sciReflWallThickX;
+  G4double sciReflSizeY = sciCrystSizeY + sciReflWallThickY;
+  G4double sciReflSizeZ = sciCrystSizeZ + sciReflWindThick/2;
   
   // Position of the reflector relative to the crystal position
-  sciReflPosX = sciCrystPosX;
-  sciReflPosY = sciCrystPosY;
-  sciReflPosZ = sciCrystPosZ - sciReflWindThick/2; //Position of the Reflector relative to the Al Housing along the Z axis
+  G4double sciReflPosX = sciCrystPosX;
+  G4double sciReflPosY = sciCrystPosY;
+  G4double sciReflPosZ = sciCrystPosZ - sciReflWindThick/2; //Position of the Reflector relative to the Al Housing along the Z axis
   
   G4ThreeVector sciReflPos = G4ThreeVector(sciReflPosX,sciReflPosY,sciReflPosZ);
   
   // Define box for Reflector
   G4VSolid* reflBoxSolid = new G4Box("reflBoxSolid",sciReflSizeX,sciReflSizeY,sciReflSizeZ);
   
-  // Subtracts Crystal box from Reflector box  (HAPOL ????)
+  // Subtracts Crystal box from Reflector box 
   G4VSolid* sciReflSolid = new G4SubtractionSolid("sciReflSolid",reflBoxSolid,sciCrystSolid,0,
                                                   G4ThreeVector(sciCrystPosX, sciCrystPosY, sciReflWindThick/2));
   
@@ -145,20 +154,15 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   //--------------------------------------------------------//
   //******************** Aluminum Housing ******************//
   //--------------------------------------------------------//
-  // Dimensions of Housing (half-side)
-  sciHousWallThickX = 3.0*mm;
-  sciHousWallThickY = 3.0*mm;
-  sciHousWindThick = 1.0*mm;
-  
   // Outer dimensions of the housing relative to the crystal size and to the thickness of the reflector
   sciHousSizeX = sciCrystSizeX + sciReflWallThickX + sciHousWallThickX;
   sciHousSizeY = sciCrystSizeY + sciReflWallThickY + sciHousWallThickY;
   sciHousSizeZ = sciCrystSizeZ + sciReflWindThick/2 + sciHousWindThick/2;
   
   // Position of the housing relative to the crystal position
-  sciHousPosX = sciCrystPosX;
-  sciHousPosY = sciCrystPosY;
-  sciHousPosZ = sciCrystPosZ - (sciReflWindThick/2 + sciHousWindThick/2);
+  G4double sciHousPosX = sciCrystPosX;
+  G4double sciHousPosY = sciCrystPosY;
+  G4double sciHousPosZ = sciCrystPosZ - (sciReflWindThick/2 + sciHousWindThick/2);
   
   G4ThreeVector sciHousPos = G4ThreeVector(sciHousPosX, sciHousPosY, sciHousPosZ);
   
@@ -179,14 +183,14 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   //******************** Quartz window *********************//
   //--------------------------------------------------------//
   // Dimensions of the Window (half-side)
-  sciWindSizeX = sciCrystSizeX + sciReflWallThickX + sciHousWallThickX;	//X half-size of the Window
-  sciWindSizeY = sciCrystSizeY + sciReflWallThickY + sciHousWallThickY; //Y half-size of the Window
-  sciWindSizeZ = 1.*mm;						        //Z half-size of the Window
+  G4double sciWindSizeX = sciCrystSizeX + sciReflWallThickX + sciHousWallThickX;	//X half-size of the Window
+  G4double sciWindSizeY = sciCrystSizeY + sciReflWallThickY + sciHousWallThickY; //Y half-size of the Window
+  G4double sciWindSizeZ = 1.*mm;						        //Z half-size of the Window
   
   // Position of the window relative to the crystal
-  sciWindPosX = sciCrystPosX ;				      //Position of the Window along the X axis
-  sciWindPosY = sciCrystPosY ;				      //Position of the Window along the Y axis
-  sciWindPosZ = sciCrystPosZ + sciCrystSizeZ + sciWindSizeZ;  //Position of the Window relative to the Al Housing along the Z axis
+  G4double sciWindPosX = sciCrystPosX ;				      //Position of the Window along the X axis
+  G4double sciWindPosY = sciCrystPosY ;				      //Position of the Window along the Y axis
+  G4double sciWindPosZ = sciCrystPosZ + sciCrystSizeZ + sciWindSizeZ;  //Position of the Window relative to the Al Housing along the Z axis
 
   //Position of the Window in space relative to the Al Housing
   G4ThreeVector sciWindPos = G4ThreeVector(sciWindPosX, 
@@ -203,7 +207,7 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   // Define Logical Volume for Window
   G4LogicalVolume* sciWindLog = new G4LogicalVolume(sciWindSolid, windowSpecMATMaterial, "sciWindLog");
   
-  circleR1 = ComputeCircleR1();
+  G4double circleRadius = ComputeCircleR1();
   
   // Define segment which will contain crystals
   G4NistManager* nist = G4NistManager::Instance();
@@ -218,7 +222,7 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   
   //Define the vacuum chamber flange
   G4LogicalVolume* vacuumFlangeBoxLog;
-  if (vacuumChamber == "yes") {
+  if (vacuumChamberIncludedFlag == "on") {
     G4VSolid* vacuumFlangeBox = 
       new G4Box("vacuumFlangeBox",
 		vacuumFlangeSizeX,
@@ -241,14 +245,14 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
     G4Material* vacuumSideFlangeMat = vacuumFlangeSpecMATMaterial;
  
     G4RotationMatrix rotSideFlnge  = G4RotationMatrix();
-    rotSideFlnge.rotateZ(dPhi/2);
+    rotSideFlnge.rotateZ(twopi/nbSegments/2);
     G4ThreeVector positionSideFlange1 = G4ThreeVector(0, 0, vacuumFlangeSizeX);
     G4Transform3D transformSideFlange1 = G4Transform3D(rotSideFlnge, positionSideFlange1);
     G4ThreeVector positionSideFlange2 = G4ThreeVector(0, 0, -vacuumFlangeSizeX-2*vacuumFlangeSizeZ);
     G4Transform3D transformSideFlange2 = G4Transform3D(rotSideFlnge, positionSideFlange2);
     G4double vacuumChamberSideFlangeThickness[] = {0, 2*vacuumFlangeSizeZ};
     G4double vacuumChamberSideFlangeInnerR[] = {0, 0};
-    G4double vacuumChamberSideFlangeOuterR[] = {circleR1+2*vacuumFlangeSizeZ, circleR1+2*vacuumFlangeSizeZ};
+    G4double vacuumChamberSideFlangeOuterR[] = {circleRadius+2*vacuumFlangeSizeZ, circleRadius+2*vacuumFlangeSizeZ};
     
     G4VSolid* vacuumChamberSideFlange = 
       new G4Polyhedra("vacuumChamberSideFlange",
@@ -282,16 +286,24 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 			false,                                     //no boolean operation
 			2);                                         //copy number
     //fCheckOverlaps);                           // checking overlaps
+    if(vacuumChamberSideFlange1Phys)  
+      ;
+    if(vacuumChamberSideFlange2Phys)  
+      ;
   }
   
   
   // Defines insulation tube between the field cage and the vacuum chamber which 
   // might be used for preventing sparks in the real setup
   // And its stopping power should be simulated
-  if (vacuumChamber == "yes" && insulationTube == "yes") {
+  if (vacuumChamberIncludedFlag == "on" && insulationTubeIncludedFlag == "on") {
     //Geometry of the insulation Tube
-    G4double insulationTubeInnerRadius = circleR1-insulationTubeThickness;
-    G4double insulationTubeOuterRadius = circleR1;
+    G4double insulationTubeInnerRadius = circleRadius-insulationTubeThickness;
+    G4double insulationTubeOuterRadius = circleRadius;
+
+  G4cout << "insulationTubeInnerRadius: " <<  circleRadius 
+	 << " - " << insulationTubeThickness<< G4endl;
+
     G4VSolid* insulationTubeSolid = 
       new G4Tubs("insulationTubeSolid",
 		 insulationTubeInnerRadius,
@@ -315,6 +327,9 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 			1);                              //copy number
       //fCheckOverlaps);                // checking overlaps
     
+    if(insulationTubePhys)
+      ;
+
     // Visualization attributes for the insulation tube
     G4VisAttributes* insulationTubeVisAtt =
       new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));	//Instantiation of visualization attributes with cyan colour
@@ -336,7 +351,7 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   G4int i = 0;          //counter for reconstruction of crystal positions
   G4int crysNb = 1;     //crystal counter
   for (G4int iseg = 0; iseg < nbSegments ; iseg++) {
-    G4double phi = iseg*dPhi;
+    G4double phi = iseg*twopi/nbSegments;
     G4RotationMatrix rotm  = G4RotationMatrix();     //** rotation matrix for positioning segments
     rotm.rotateY(90*deg);                            //** rotation matrix for positioning segments
     rotm.rotateZ(phi);                               //** rotation matrix for positioning segments
@@ -415,9 +430,9 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 
     //segment and flange positioning
     
-    if (vacuumChamber == "yes") {
+    if (vacuumChamberIncludedFlag == "on") {
       //Flange positioning
-      G4ThreeVector positionVacuumFlange = (circleR1+vacuumFlangeSizeZ)*uz;
+      G4ThreeVector positionVacuumFlange = (circleRadius+vacuumFlangeSizeZ)*uz;
       G4Transform3D transformVacuumFlange = G4Transform3D(rotm, positionVacuumFlange);
       new G4PVPlacement(transformVacuumFlange, //position
 			vacuumFlangeBoxLog,                //its logical volume
@@ -427,7 +442,7 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 			iseg);                               //copy number
       //fCheckOverlaps);                    // checking overlaps
       //Segment positioning
-      G4ThreeVector positionSegment = (circleR1+2*vacuumFlangeSizeZ+(sciHousSizeZ+sciWindSizeZ)-(2*vacuumFlangeSizeZ-vacuumFlangeThickFrontOfScint))*uz;
+      G4ThreeVector positionSegment = (circleRadius+2*vacuumFlangeSizeZ+(sciHousSizeZ+sciWindSizeZ)-(2*vacuumFlangeSizeZ-vacuumFlangeThickFrontOfScint))*uz;
       G4Transform3D transformSegment = G4Transform3D(rotm, positionSegment);
       new G4PVPlacement(transformSegment, //position
 			segmentBoxLog,                //its logical volume
@@ -448,10 +463,10 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 	crystalPositionsArray[i] = TransformCrystPos.TransformPoint(crystalPositionsArray[i]);
       }
     }
-    //segment position in case vacuumChamber is "no"
+    //segment position in case vacuumChamberIncludedFlag is "off"
     else {
       //Segment positioning
-      G4ThreeVector positionSegment = (circleR1+(sciHousSizeZ+sciWindSizeZ))*uz;
+      G4ThreeVector positionSegment = (circleRadius+(sciHousSizeZ+sciWindSizeZ))*uz;
       G4Transform3D transformSegment = G4Transform3D(rotm, positionSegment);
       new G4PVPlacement(transformSegment, //position
 			segmentBoxLog,                //its logical volume
@@ -581,6 +596,7 @@ void ActarSimSpecMATSciDetectorConstruction::PrintDetectorParameters() {
 //////////////////////////////////////////////////////////////////
 /// Calculates Auxiliar Radius for the location of the elements
 G4double ActarSimSpecMATSciDetectorConstruction::ComputeCircleR1() {
+  G4double circleR1;
   if (nbSegments == 1) {
     circleR1 = 0;
   }
@@ -588,16 +604,16 @@ G4double ActarSimSpecMATSciDetectorConstruction::ComputeCircleR1() {
     circleR1 = 100;
   }
   else {
-    if (vacuumChamber == "yes") {
+    if (vacuumChamberIncludedFlag == "on") {
       if (vacuumFlangeSizeY>sciHousSizeY*nbCrystInSegmentColumn) {
-	circleR1 = vacuumFlangeSizeY/(tandPhi);
+	circleR1 = vacuumFlangeSizeY/(std::tan(0.5*twopi/nbSegments));
       }
       else {
-	circleR1 = sciHousSizeY*nbCrystInSegmentColumn/(tandPhi);
+	circleR1 = sciHousSizeY*nbCrystInSegmentColumn/(std::tan(0.5*twopi/nbSegments));
       }
     }
     else {
-      circleR1 = sciHousSizeY*nbCrystInSegmentColumn/(tandPhi);
+      circleR1 = sciHousSizeY*nbCrystInSegmentColumn/(std::tan(0.5*twopi/nbSegments));
     }
   }
   return circleR1;

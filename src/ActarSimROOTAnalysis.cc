@@ -389,15 +389,10 @@ void ActarSimROOTAnalysis::BeginOfRunAction(const G4Run *aRun) {
   G4cout << "########  New Run With Number " << aRun->GetRunID() << " Detected!!  ######" << G4endl;
   G4cout << "####  A new directory will be opened in the output ROOT file  ####" << G4endl;
   G4cout << "################################################################## " << G4endl;
-  G4cout << "1" << G4endl;
-
   //static Char_t newDirName[255];
   sprintf(newDirName,"%s%i","Histos",aRun->GetRunID());
-  G4cout << "2" << G4endl;
   simFile->mkdir(newDirName,newDirName);
-  G4cout << "3" << G4endl;
   simFile->cd(newDirName);
-  G4cout << "4" << G4endl;
 
   if(storeHistogramsFlag=="on"){
     // Step Sum Length

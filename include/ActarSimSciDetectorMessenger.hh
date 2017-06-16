@@ -14,7 +14,6 @@
 #include "G4UImessenger.hh"
 
 class ActarSimSciDetectorConstruction;
-class ActarSimPrimaryGeneratorAction;
 
 class G4UIdirectory;
 class G4UIcmdWithAString;

@@ -14,7 +14,7 @@
 #include "ActarSimGasDetectorConstruction.hh"
 #include "ActarSimDetectorConstruction.hh"
 #include "ActarSimGasDetectorMessenger.hh"
-//#include "ActarSimDetectorMessenger.hh"
+#include "ActarSimSpecMATSciDetectorConstruction.hh"
 #include "ActarSimROOTAnalysis.hh"
 #include "ActarSimGasSD.hh"
 
@@ -48,7 +48,7 @@ ActarSimGasDetectorConstruction(ActarSimDetectorConstruction* det)
   SetBeamShieldMaterial("Iron");
   SetGasMaterial("D2");
 
-  //Default value for the volume is a Box
+  //Default value for the volume in the constructor is a Box
   SetDetectorGeometry("box");
 
   //default size of GasBox (0.5x0.5x0.5 m3)
@@ -94,25 +94,15 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
   // Several geometries are possible. Select the different options using
   // the messenger commands
   //////////////////////////////////////////////////////////////////////
-
+  
   G4LogicalVolume* gasLog(0);                   //pointer to logic gas
   G4VPhysicalVolume* gasPhys(0);                //pointer to physic gas
-
+  
+  if(detConstruction->GetSpecMATGeoIncludedFlag() == "on"){
+    SetDetectorGeometry("tube");
+  }
+  
   if(detectorGeometry == "box"){
-    G4cout << "##################################################################" << G4endl
-	   << "######  ActarSimGasDetectorConstruction::ConstructActarTPC()  #######" << G4endl
-	   << " Box-like gas geometry." << G4endl;
-    G4cout << " Box Parameters: " << G4endl
-	   << " gasBoxSizeX = " <<  gasBoxSizeX/mm
-	   << " mm,  gasBoxSizeY = " <<  gasBoxSizeY/mm
-	   << " mm,  gasBoxSizeZ = " <<  gasBoxSizeZ/mm << " mm" << G4endl
-	   << " gasBoxCenterX = " <<  gasBoxCenterX/mm
-	   << " mm,  gasBoxCenterY = " <<  gasBoxCenterY/mm
-	   << " mm,  gasBoxCenterZ = " <<  gasBoxCenterZ << " mm" << G4endl
-	   << " gasMaterial: " <<  gasMaterial << G4endl;
-    G4cout << "##################################################################"<< G4endl;
-
-
     if(detConstruction->GetACTARTPCGeoIncludedFlag() == "on"){
       //gas Box size: (266*170*266)mm
       gasBoxSizeX = 133.*mm;
@@ -137,45 +127,68 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
       gasBoxSizeX = GetGasBoxSizeX();
       gasBoxSizeY = GetGasBoxSizeY();
       gasBoxSizeZ = GetGasBoxSizeZ();
-
+      
       gasBoxCenterX = GetGasBoxCenterX();
       gasBoxCenterY = GetGasBoxCenterY();
       gasBoxCenterZ = GetGasBoxCenterZ();
     }
-
+    
+    G4cout << "##################################################################" << G4endl
+	   << "######  ActarSimGasDetectorConstruction::ConstructGas()  #######" << G4endl
+	   << " Box-like gas geometry." << G4endl;
+    G4cout << " Box Parameters: " << G4endl
+	   << " gasBoxSizeX = " <<  gasBoxSizeX/mm
+	   << " mm,  gasBoxSizeY = " <<  gasBoxSizeY/mm
+	   << " mm,  gasBoxSizeZ = " <<  gasBoxSizeZ/mm << " mm" << G4endl
+	   << " gasBoxCenterX = " <<  gasBoxCenterX/mm
+	   << " mm,  gasBoxCenterY = " <<  gasBoxCenterY/mm
+	   << " mm,  gasBoxCenterZ = " <<  gasBoxCenterZ << " mm" << G4endl
+	   << " gasMaterial: " <<  gasMaterial << G4endl;
+    G4cout << "##################################################################"<< G4endl;
+    
     G4Box* gasBox;
     gasBox = new G4Box("gasBox",gasBoxSizeX,gasBoxSizeY,gasBoxSizeZ);
-
+    
     gasLog = new G4LogicalVolume(gasBox,gasMaterial,"gasLog");
-
+    
     gasPhys = new G4PVPlacement(0,
 				G4ThreeVector(gasBoxCenterX,gasBoxCenterY,gasBoxCenterZ),
 				gasLog,"gasPhys",chamberLog,false,0);
-
+    
     // //--------------------------
     // // Field Cage wire replaced by a copper foil around the GasBox
     // //--------------------------
     // G4double wireFoilSizeX = gasBoxSizeX;
     // G4double wireFoilSizeY = gasBoxSizeY;
     // G4double wireFoilSizeZ = 0.00125/2*mm;//That's for 20 um wire with a pitch of 1 mm
-
+    
     // G4Box *wireFoil=new G4Box("wireFoilBox",wireFoilSizeX,wireFoilSizeY,wireFoilSizeZ);
     // wireFoilLog=new G4LogicalVolume(wireFoil,G4Material::GetMaterial("Copper"),"wireFoilBox");
-
+    
     // G4double wireFoilPosX = 0.*mm;
     // G4double wireFoilPosY =  -105.0+gasBoxSizeY+4.54*mm;
     // G4double wireFoilPosZ = gasBoxSizeZ+wireFoilSizeZ;
-
+    
     // wireFoilPhys=new G4PVPlacement(0,G4ThreeVector(wireFoilPosX,wireFoilPosY,wireFoilPosZ),
     // 				   wireFoilLog,"wireFoilBox",chamberLog,false,0);
-
+    
     // G4VisAttributes* wireFoilVisAtt= new G4VisAttributes(G4Colour(1.0,0.5,0.));
     // wireFoilVisAtt->SetVisibility(true);
     // wireFoilLog->SetVisAttributes(wireFoilVisAtt);
   }
   else if(detectorGeometry == "tube"){
+    if(detConstruction->GetSpecMATGeoIncludedFlag() == "on"){
+      //radius and length from the SpecMATSciDetector parameters
+      radiusGasTub = detConstruction->GetSpecMATSciDetector()->ComputeCircleR1() - 
+	detConstruction->GetSpecMATSciDetector()->GetInsulationTubeThickness();
+      lengthGasTub = detConstruction->GetSpecMATSciDetector()->GetVacuumFlangeSizeX();
+    }
+    //centered in (0,0,lengthGasTub) to have origin in the detector entrance
+    //gasBoxCenterZ = lengthGasTub;
+    gasBoxCenterZ = 0.*mm;
+    
     G4cout << "##################################################################" << G4endl
-	   << "########  ActarSimGasDetectorConstruction::ConstructActarTPC()  ########" << G4endl
+	   << "########  ActarSimGasDetectorConstruction::ConstructGas()  ########" << G4endl
 	   << " Tube-like gas geometry." << G4endl;
     G4cout << " Tube Parameters: " << G4endl
 	   << " radiusGasTub = " <<  radiusGasTub/mm
@@ -183,15 +196,7 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
 	   << " gasMaterial: " <<  gasMaterial << G4endl;
     G4cout << "##################################################################" << G4endl;
 
-    if(detConstruction->GetSpecMATGeoIncludedFlag() == "on"){
-      //gas Tube radius mm
-      radiusGasTub = 50.*mm;
-      lengthGasTub = 100.*mm;
-    }
-    //centered in (0,0,lengthGasTub) to have origin in the detector entrance
-    //gasBoxCenterZ = lengthGasTub;
-    gasBoxCenterZ = 0.*mm;
-
+ 
     G4Tubs* gasTub;
     gasTub = new G4Tubs("gasTub",0*mm,radiusGasTub,lengthGasTub,0,twopi);
 
@@ -214,7 +219,7 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
 
   if( beamShieldGeometry == "tube"){
     G4cout << "##################################################################" << G4endl
-	   << "########  ActarSimGasDetectorConstruction::ConstructActarTPC()  ########" << G4endl
+	   << "########  ActarSimGasDetectorConstruction::ConstructGas()  ########" << G4endl
 	   << " Beam shielding geometry." << G4endl;
     G4cout << " Tube Parameters: " << G4endl
 	   << " innerRadiusBeamShieldTub = " <<  innerRadiusBeamShieldTub/mm

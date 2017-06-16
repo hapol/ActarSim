@@ -60,10 +60,9 @@ ActarSimDetectorConstruction::ActarSimDetectorConstruction()
       solidWorld(0), worldLog(0), chamberLog(0), AlplateLog(0), DiamondLog(0), SupportLog(0),
   worldPhys(0), chamberPhys(0), AlplatePhys(0), DiamondPhys(0), SupportPhys(0),
   mediumMaterial(0), defaultMaterial(0), chamberMaterial(0), windowMaterial(0),
-  emField(0), MaikoGeoIncludedFlag("off"),
-      ACTARTPCDEMOGeoIncludedFlag("off"), ACTARTPCGeoIncludedFlag("off"),
+  emField(0), MaikoGeoIncludedFlag("off"),ACTARTPCDEMOGeoIncludedFlag("off"), ACTARTPCGeoIncludedFlag("off"),
   gasGeoIncludedFlag("on"), silGeoIncludedFlag("off"), sciGeoIncludedFlag("off"),
-  SpecMATGeoIncludedFlag("off"), OthersGeoIncludedFlag("off"),
+      SpecMATGeoIncludedFlag("off"), OthersGeoIncludedFlag("off"),
   gasDet(0), silDet(0),silRingDet(0), sciDet(0), sciRingDet(0), plaDet(0),SpecMATSciDet(0) {
   //default values of half-length -> size of World (2x2x2 m3)
   worldSizeX = 1.*m;
@@ -694,6 +693,9 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   Double_t scatteringChamberTubeRadius = 
     SpecMATSciDet->ComputeCircleR1()-SpecMATSciDet->GetInsulationTubeThickness();
   
+  G4cout << "scatteringChamberTubeRadius: " <<  SpecMATSciDet->ComputeCircleR1() 
+	 << " - " << SpecMATSciDet->GetInsulationTubeThickness() << G4endl;
+
   G4VSolid* scatteringChamberTube = 
     new G4Tubs("scatteringChamberSolid",
 	       0.,
@@ -702,16 +704,16 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
 	       0*deg,
 	       360*deg);
 
-  G4LogicalVolume* scatteringChamberLog = 
+  chamberLog = 
     new G4LogicalVolume(scatteringChamberTube,
 			chamberMaterial,
-			"scatteringChamberLog");
+			"Chamber");
 
-  G4VPhysicalVolume* scatteringChamberPhys = 
+  chamberPhys = 
     new G4PVPlacement(0,
 		      G4ThreeVector(0,0,0),
-		      scatteringChamberLog,  //its logical volume
-		      "scatteringChamber",   //its name
+		      chamberLog,  //its logical volume
+		      "Chamber",   //its name
 		      worldLog,              //its mother  volume
 		      false,                 //no boolean operation
 		      0);                    //copy number
@@ -722,9 +724,9 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
     new G4VisAttributes(G4Colour(1.0, 0.0, 0.0)); //Instantiation of visualization attributes with cyan colour
   scatteringChamberVisAtt->SetVisibility(true);   //Pass this object to Visualization Manager for visualization
   scatteringChamberVisAtt->SetForceWireframe(true);//I believe that it might make Window transparent
-  scatteringChamberLog->SetVisAttributes(scatteringChamberVisAtt); //Assignment of visualization attributes to the logical volume of the Window
+  chamberLog->SetVisAttributes(scatteringChamberVisAtt); //Assignment of visualization attributes to the logical volume of the Window
   
-  if(scatteringChamberPhys){;}
+  if(chamberPhys){;}
   
   //--------------------------
   //Gas Volume
@@ -737,6 +739,24 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   //--------------------------
   if(SpecMATGeoIncludedFlag=="on")
     SpecMATSciDet->Construct(worldLog);
+  
+  //--------------------------
+  // Histogramming
+  //--------------------------
+  if (gActarSimROOTAnalysis)
+    gActarSimROOTAnalysis->Construct(worldPhys);
+  
+  //--------------------------
+  //connection to the analysis only for those detectors included!
+  //--------------------------
+  if (gActarSimROOTAnalysis) {
+    if (gasGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetGasAnalOn();
+    if (silGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetSilAnalOn();
+    //    if (sciGeoIncludedFlag=="on") 
+    //Open always the Scintillator part for the SpecMAT scintillators
+    gActarSimROOTAnalysis->SetSciAnalOn();
+    gActarSimROOTAnalysis->InitAnalysisForExistingDetectors();
+  }
   
   return worldPhys;
 }

@@ -24,7 +24,7 @@
 
 //////////////////////////////////////////////////////////////////
 /// Constructor
-/// command included in this AnalysisMessenger:
+/// command included in this DetectorMessenger:
 /// - /ActarSim/det/MaikoGeoIncludedFlag
 /// - /ActarSim/det/ACTARTPCDEMOGeoIncludedFlag
 /// - /ActarSim/det/ACTARTPCGeoIncludedFlag
