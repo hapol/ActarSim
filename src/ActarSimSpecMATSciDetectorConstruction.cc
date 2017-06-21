@@ -543,10 +543,10 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
 	 << " mm, sciCrystPosZ: " <<  sciCrystPosZ/mm  << " mm" << G4endl;
   G4cout << " sciHousSizeX: " <<  sciHousSizeX/mm << " mm, sciHousSizeY: " <<  sciHousSizeY/mm 
 	 << " mm, sciHousSizeZ: " <<  sciHousSizeZ/mm  << " mm" << G4endl;
-  G4cout << " sciReflWallThickX: " <<  sciReflWallThickX/mm << " mm, sciReflWallThickY: " <<  sciReflWallThickY/mm 
-	 << " mm, sciReflWallThickZ: " <<  sciReflWallThickZ/mm  << " mm" << G4endl;
-  G4cout << " sciHousWallThickX: " <<  sciHousWallThickX/mm << " mm, sciHousWallThickY: " <<  sciHousWallThickY/mm 
-	 << " mm, sciHousWallThickZ: " <<  sciHousWallThickZ/mm  << " mm" << G4endl;
+  G4cout << " sciReflWallThickX: " <<  sciReflWallThickX/mm << " mm, sciReflWallThickY: " 
+	 <<  sciReflWallThickY/mm << " mm" << G4endl;
+  G4cout << " sciHousWallThickX: " <<  sciHousWallThickX/mm << " mm, sciHousWallThickY: " 
+	 <<  sciHousWallThickY/mm << " mm" << G4endl;
   G4cout << "################################################################"
 	 << G4endl;
   

@@ -1044,13 +1044,13 @@ void ActarSimDetectorConstruction::PrintDetectorParameters() {
 	 << "## The chamber material is: "<< G4endl << chamberMaterial << G4endl << G4endl;
   G4cout << G4endl << " The EM field applied has the following components:"
 	 << G4endl << " Magnetic component in Tesla: "
-	 << emField->GetMagneticFieldValue().x()/T << " "
-	 << emField->GetMagneticFieldValue().y()/T << " "
-	 << emField->GetMagneticFieldValue().z()/T
+	 << emField->GetMagneticFieldValue().x()/tesla << " "
+	 << emField->GetMagneticFieldValue().y()/tesla << " "
+	 << emField->GetMagneticFieldValue().z()/tesla
 	 << G4endl << " Electric component in MV/m: "
-	 << emField->GetElectricFieldValue().x()/(m/MV) << " "
-	 << emField->GetElectricFieldValue().y()/(m/MV) << " "
-	 << emField->GetElectricFieldValue().z()/(m/MV) << G4endl
+	 << emField->GetElectricFieldValue().x()/(megavolt/m) << " "
+	 << emField->GetElectricFieldValue().y()/(megavolt/m) << " "
+	 << emField->GetElectricFieldValue().z()/(megavolt/m) << G4endl
 	 << "##################################################################" << G4endl;
   if (gasGeoIncludedFlag=="on") gasDet->PrintDetectorParameters();
   if (silGeoIncludedFlag=="on") silDet->PrintDetectorParameters();

@@ -85,8 +85,8 @@
 /ActarSim/det/setMediumMat Air                   #Selects Material outside the Chamber.
 /ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
 # Electric and Magnetic fields
-#/ActarSim/det/setEleField 0 5e-3 0               #Defines electric field
-/ActarSim/det/setMagField 0 0 3 T                #Defines magnetic field
+#/ActarSim/det/setEleField 0 5e-3 0 megavolt/m              #Defines electric field
+/ActarSim/det/setMagField 0 0 3 tesla                #Defines magnetic field
 #
 #
 # GAS CHARACTERISTICS (options are H2, D2, He, Ar, CF4, CH4, iC4H10, set both in GasBox and GasChamber)
