@@ -693,8 +693,8 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   Double_t scatteringChamberTubeRadius = 
     SpecMATSciDet->ComputeCircleR1()-SpecMATSciDet->GetInsulationTubeThickness();
   
-  G4cout << "scatteringChamberTubeRadius: " <<  SpecMATSciDet->ComputeCircleR1() 
-	 << " - " << SpecMATSciDet->GetInsulationTubeThickness() << G4endl;
+  //G4cout << "scatteringChamberTubeRadius: " <<  SpecMATSciDet->ComputeCircleR1() 
+  // << " - " << SpecMATSciDet->GetInsulationTubeThickness() << G4endl;
 
   G4VSolid* scatteringChamberTube = 
     new G4Tubs("scatteringChamberSolid",
@@ -758,6 +758,9 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
     gActarSimROOTAnalysis->InitAnalysisForExistingDetectors();
   }
   
+  //visibility
+  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+
   return worldPhys;
 }
 
@@ -1040,14 +1043,14 @@ void ActarSimDetectorConstruction::PrintDetectorParameters() {
 	 << "## The medium material is: "<< G4endl << mediumMaterial << G4endl << G4endl << G4endl
 	 << "## The chamber material is: "<< G4endl << chamberMaterial << G4endl << G4endl;
   G4cout << G4endl << " The EM field applied has the following components:"
-	 << G4endl << " Magnetic component: "
-	 << emField->GetMagneticFieldValue().x() << " "
-	 << emField->GetMagneticFieldValue().y() << " "
-	 << emField->GetMagneticFieldValue().z()
-	 << G4endl << " Electric component: "
-	 << emField->GetElectricFieldValue().x() << " "
-	 << emField->GetElectricFieldValue().y() << " "
-	 << emField->GetElectricFieldValue().z() << G4endl
+	 << G4endl << " Magnetic component in Tesla: "
+	 << emField->GetMagneticFieldValue().x()/T << " "
+	 << emField->GetMagneticFieldValue().y()/T << " "
+	 << emField->GetMagneticFieldValue().z()/T
+	 << G4endl << " Electric component in MV/m: "
+	 << emField->GetElectricFieldValue().x()/(m/MV) << " "
+	 << emField->GetElectricFieldValue().y()/(m/MV) << " "
+	 << emField->GetElectricFieldValue().z()/(m/MV) << G4endl
 	 << "##################################################################" << G4endl;
   if (gasGeoIncludedFlag=="on") gasDet->PrintDetectorParameters();
   if (silGeoIncludedFlag=="on") silDet->PrintDetectorParameters();

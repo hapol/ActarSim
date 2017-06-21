@@ -86,13 +86,12 @@
 /ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
 # Electric and Magnetic fields
 #/ActarSim/det/setEleField 0 5e-3 0               #Defines electric field
-#/ActarSim/det/setMagField 0 0 0 T                #Defines magnetic field
+/ActarSim/det/setMagField 0 0 3 T                #Defines magnetic field
 #
 #
 # GAS CHARACTERISTICS (options are H2, D2, He, Ar, CF4, CH4, iC4H10, set both in GasBox and GasChamber)
 #
-#/ActarSim/det/gas/setGasPressure 1.01325         #Select the Gas Pressure for the Gas box
-/ActarSim/det/gas/setGasPressure 0.2 bar
+/ActarSim/det/gas/setGasPressure 1.0 bar         #Select the Gas Pressure for the Gas box
 /ActarSim/det/gas/setGasTemperature 293.15       #Select the Gas Temperature for the Gas box
 #
 /ActarSim/det/gas/setGasMat iC4H10               #Select Material of the Gas for the Gas box
@@ -104,36 +103,9 @@
 #/ActarSim/det/gas/setGasMat GasMix                  #Set a Gas Mixture for the Gas box
 #
 #
-# SILICON DETECTOR (valid if /ActarSim/det/silGeoIncludedFlag on has been settled)
-/ActarSim/det/silGeoIncludedFlag off              #Includes the geometry of the silicons in the simulation
-#Options for Silicon and scintillator coverage:
-# 6 bits to indicate which sci wall is present (1) or absent (0)
-# order is:
-# bit1 (lsb) beam output wall                 1
-# bit2 lower (gravity based) wall             2
-# bit3 upper (gravity based) wall             4
-# bit4 left (from beam point of view) wall    8
-# bit5 right (from beam point of view) wall   16
-# bit6 (msb) beam entrance wall               32
-# examples: 63 full coverage; 3 only output and bottom walls ...
-/ActarSim/det/sil/sideCoverage 25                #Selects the silicon coverage (default 1). See instructions above
-/ActarSim/det/sil/xBoxHalfLength 53.8 mm         #Sets the x half length of the silicon detectors box
-/ActarSim/det/sil/yBoxHalfLength 0. mm           #Sets the y half length of the silicon detectors box
-/ActarSim/det/sil/zBoxHalfLength 46.8 mm         #Sets the z half length of the silicon detectors box
-/ActarSim/det/sil/print                          #Prints geometry
-#
-# SCINTILLATOR DETECTOR (valid if /ActarSim/det/sciGeoIncludedFlag on has been settled)
-/ActarSim/det/sciGeoIncludedFlag off
-# see above explanation in the equivalent command for the Silicons
-#/ActarSim/det/sci/sideCoverage 25               #Selects the silicon coverage (default 1). See above explanation for the Silicons
-#/ActarSim/det/sci/xBoxHalfLength 150. mm        #Sets the x half length of the scintillator detectors box
-#/ActarSim/det/sci/yBoxHalfLength 150. mm        #Sets the y half length of the scintillator detectors box
-#/ActarSim/det/sci/zBoxHalfLength 150. mm        #Sets the z half length of the scintillator detectors box
-#/ActarSim/det/sci/print                         #Prints geometry
-#
 # Update is MANDATORY after any material, field or detector change
 /ActarSim/det/update                             #Updates geometry
-#/ActarSim/det/print                              #Prints geometry
+/ActarSim/det/print                              #Prints geometry
 #
 #Control of the output on the ROOT file
 #all the tracks are stored (note: huge space comsumption)
@@ -206,9 +178,9 @@
 #/ActarSim/gun/Kine/incidentIon 1 2 1 0.0 2.0141
 #/ActarSim/gun/Kine/incidentIon 2 4 2 0.0 4.001506179125
 #/ActarSim/gun/Kine/incidentIon 2 4 2 0.0 4.00260325
-#/ActarSim/gun/Kine/incidentIon 6 12 6 0.0 12.
+/ActarSim/gun/Kine/incidentIon 6 12 6 0.0 12.
 #/ActarSim/gun/Kine/incidentIon 6 13 6 0.0 13.00335483778
-/ActarSim/gun/Kine/incidentIon 9 17 9 0.0 17.002095237   #Set properties of incident ion to be generated
+#/ActarSim/gun/Kine/incidentIon 9 17 9 0.0 17.002095237   #Set properties of incident ion to be generated
 #/ActarSim/gun/Kine/incidentIon 50 132 50 0.0 131.9178
 
 /ActarSim/gun/Kine/targetIon 1 1 1 0.0 1.00782503207   #Set properties of target ion to be generated
@@ -217,25 +189,25 @@
 #/ActarSim/gun/Kine/scatteredIon 1 2 1 0.0 2.0141
 #/ActarSim/gun/Kine/scatteredIon 2 4 2 0.0 4.001506179125 #alpha
 #/ActarSim/gun/Kine/scatteredIon 2 4 2 0.0 4.00260325415 #4He
-#/ActarSim/gun/Kine/scatteredIon 6 12 6 0.0 12.
+/ActarSim/gun/Kine/scatteredIon 6 12 6 0.0 12.
 #/ActarSim/gun/Kine/scatteredIon 6 13 6 0.0 13.00335483778
 #/ActarSim/gun/Kine/scatteredIon 50 133 50 0.854 132.9238
 /ActarSim/gun/Kine/scatteredIon 2 4 2 0.0 4.001506179125   #Set properties of scattered ion to be generated
 
-#/ActarSim/gun/Kine/recoilIon 1 1 1 0.0 1.00782503207
+/ActarSim/gun/Kine/recoilIon 1 1 1 0.0 1.00782503207
 #/ActarSim/gun/Kine/recoilIon 1 2 1 0.0 2.0141
-/ActarSim/gun/Kine/recoilIon 8 14 8 0.0 14.00859625    #Set properties of recoil ion to be generated
+#/ActarSim/gun/Kine/recoilIon 8 14 8 0.0 14.00859625    #Set properties of recoil ion to be generated
 
 #/ActarSim/gun/time 0
 #/ActarSim/gun/polarization 0
 #/ActarSim/gun/number 1
-/ActarSim/gun/randomVertexZPosition off
+/ActarSim/gun/randomVertexZPosition on
 #/ActarSim/gun/randomVertexZRange 10 128 mm
-/ActarSim/gun/randomVertexZRange -64 64 mm
-/ActarSim/gun/vertexZPosition 72 mm
+/ActarSim/gun/randomVertexZRange -100 100 mm
+#/ActarSim/gun/vertexZPosition 72 mm
 
 #/ActarSim/gun/energy 80 MeV
-/ActarSim/gun/Kine/labEnergy 108.81 MeV
+/ActarSim/gun/Kine/labEnergy 1088.1 MeV
 /ActarSim/gun/Kine/randomThetaCM on
 /ActarSim/gun/Kine/randomThetaRange 0.0 180.0
 /ActarSim/gun/Kine/randomPhiAngle on

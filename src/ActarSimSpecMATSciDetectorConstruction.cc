@@ -301,8 +301,8 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
     G4double insulationTubeInnerRadius = circleRadius-insulationTubeThickness;
     G4double insulationTubeOuterRadius = circleRadius;
 
-  G4cout << "insulationTubeInnerRadius: " <<  circleRadius 
-	 << " - " << insulationTubeThickness<< G4endl;
+    //G4cout << "insulationTubeInnerRadius: " <<  circleRadius 
+    //	 << " - " << insulationTubeThickness<< G4endl;
 
     G4VSolid* insulationTubeSolid = 
       new G4Tubs("insulationTubeSolid",
@@ -522,9 +522,32 @@ G4VPhysicalVolume* ActarSimSpecMATSciDetectorConstruction::ConstructSci(G4Logica
   // Printing the final settings...
   G4cout << "##################################################################"
 	 << G4endl
-	 << "#########  ActarSimSpecMATSciDetectorConstruction::ConstructSci()  #######"
+	 << "####  ActarSimSpecMATSciDetectorConstruction::ConstructSci()  ####"
 	 << G4endl;
-    G4cout << "##################################################################"
+  G4cout << " sciSpecMatMaterial: " << G4endl <<  sciSpecMATMaterial << G4endl;
+  G4cout << " windowSpecMATMaterial: " << G4endl <<  windowSpecMATMaterial << G4endl;
+  G4cout << " reflectorSpecMATMaterial: " << G4endl <<  reflectorSpecMATMaterial << G4endl;
+  G4cout << " housingSpecMATMaterial: " << G4endl <<  housingSpecMATMaterial << G4endl;
+  G4cout << " vacuumFlangeSpecMATMaterial: " << G4endl <<  vacuumFlangeSpecMATMaterial << G4endl;
+  G4cout << " insulationTubeSpecMATMaterial: " << G4endl <<  insulationTubeSpecMATMaterial << G4endl;
+  G4cout << " nbSegments: " <<  nbSegments << " nbCrystInSegmentRow: " <<  nbCrystInSegmentRow 
+	 << " nbCrystInSegmentColumn: " <<  nbCrystInSegmentColumn << G4endl;
+  G4cout << " vacuumFlangeSizeX: " <<  vacuumFlangeSizeX/mm << " mm, vacuumFlangeSizeY: " <<  vacuumFlangeSizeY/mm 
+	 << " mm, vacuumFlangeSizeZ: " <<  vacuumFlangeSizeZ/mm  << " mm" << G4endl;
+  G4cout << " vacuumFlangeThickFrontOfScint: " <<  vacuumFlangeThickFrontOfScint/mm 
+	 << " mm, insulationTubeThickness: " <<  insulationTubeThickness/mm 
+	 << " mm" << G4endl;
+  G4cout << " sciCrystSizeX: " <<  sciCrystSizeX/mm << " mm, sciCrystSizeY: " <<  sciCrystSizeY/mm 
+	 << " mm, sciCrystSizeZ: " <<  sciCrystSizeZ/mm  << " mm" << G4endl;
+  G4cout << " sciCrystPosX: " <<  sciCrystPosX/mm << " mm, sciCrystPosY: " <<  sciCrystPosY/mm 
+	 << " mm, sciCrystPosZ: " <<  sciCrystPosZ/mm  << " mm" << G4endl;
+  G4cout << " sciHousSizeX: " <<  sciHousSizeX/mm << " mm, sciHousSizeY: " <<  sciHousSizeY/mm 
+	 << " mm, sciHousSizeZ: " <<  sciHousSizeZ/mm  << " mm" << G4endl;
+  G4cout << " sciReflWallThickX: " <<  sciReflWallThickX/mm << " mm, sciReflWallThickY: " <<  sciReflWallThickY/mm 
+	 << " mm, sciReflWallThickZ: " <<  sciReflWallThickZ/mm  << " mm" << G4endl;
+  G4cout << " sciHousWallThickX: " <<  sciHousWallThickX/mm << " mm, sciHousWallThickY: " <<  sciHousWallThickY/mm 
+	 << " mm, sciHousWallThickZ: " <<  sciHousWallThickZ/mm  << " mm" << G4endl;
+  G4cout << "################################################################"
 	 << G4endl;
   
   return sciCrysPhys;

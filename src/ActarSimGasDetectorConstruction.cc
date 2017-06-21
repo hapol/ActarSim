@@ -134,7 +134,7 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
     }
     
     G4cout << "##################################################################" << G4endl
-	   << "######  ActarSimGasDetectorConstruction::ConstructGas()  #######" << G4endl
+	   << "#######  ActarSimGasDetectorConstruction::ConstructGas()  ########" << G4endl
 	   << " Box-like gas geometry." << G4endl;
     G4cout << " Box Parameters: " << G4endl
 	   << " gasBoxSizeX = " <<  gasBoxSizeX/mm
@@ -188,12 +188,12 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
     gasBoxCenterZ = 0.*mm;
     
     G4cout << "##################################################################" << G4endl
-	   << "########  ActarSimGasDetectorConstruction::ConstructGas()  ########" << G4endl
+	   << "########  ActarSimGasDetectorConstruction::ConstructGas()  #######" << G4endl
 	   << " Tube-like gas geometry." << G4endl;
     G4cout << " Tube Parameters: " << G4endl
 	   << " radiusGasTub = " <<  radiusGasTub/mm
 	   << " mm,  lengthGasTub = " <<  lengthGasTub/mm << " mm" << G4endl
-	   << " gasMaterial: " <<  gasMaterial << G4endl;
+	   << " gasMaterial: " << G4endl <<  gasMaterial << G4endl;
     G4cout << "##################################################################" << G4endl;
 
  
