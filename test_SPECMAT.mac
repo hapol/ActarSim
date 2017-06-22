@@ -1,0 +1,175 @@
+################################################################
+#*-- AUTHOR : Hector Alvarez-Pol
+#*-- Date: 05/2005
+#*-- Last Update: 15/05/08
+#*-- Copyright: GENP (Univ. Santiago de Compostela)
+# --------------------------------------------------------------
+# Comments:
+#     - 16/06/17 Add SpecMATDet Flags
+#     - 15/05/08 Multidetector geometry
+#     - 05/05/06 Updating to new ActarSim (geant4.8) code
+#     - 22/11/05 Updated including CINE options
+#     - 31/05/05 Macro for ACTAR simulation
+#
+################################################################
+# Macro file for testing online jobs
+################################################################
+# verbosity levels and saveHistory
+/control/verbose 1
+/control/saveHistory
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+#
+# Setting the Physics modules; valid values are here listed:
+#   em: standard, lowenergy, penelope, (choose one from this three)
+#   common: decay,
+#   hadronic: elastic, binary, binary_ion, gamma_nuc,
+#   ion low-energy: ion-LowE, ion-LowE-ziegler1977, ion-LowE-ziegler1985,
+#   ion-LowE-ziegler2000, ion-standard
+#
+#/ActarSim/phys/RemovePhysics                     #Remove all modula physics list
+#/ActarSim/phys/addPhysics standard
+#/ActarSim/phys/addPhysics decay
+#/ActarSim/phys/addPhysics elastic
+#/ActarSim/phys/addPhysics binary
+#/ActarSim/phys/addPhysics binary_ion
+#/ActarSim/phys/addPhysics gamma_nuc
+#/ActarSim/phys/addPhysics lowenergy
+#/ActarSim/phys/addPhysics ion-LowE
+#/ActarSim/phys/addPhysics ion-LowE-ziegler1977
+#/ActarSim/phys/addPhysics ion-LowE-ziegler1985
+#/ActarSim/phys/addPhysics ion-LowE-ziegler2000
+#/ActarSim/phys/addPhysics ion-standard
+#/ActarSim/phys/addPhysics penelope
+#/ActarSim/phys/addPhysics emstandard_opt0
+/ActarSim/phys/addPhysics emstandard_opt3
+#/ActarSim/phys/addPhysics emstandard_opt4
+#/ActarSim/phys/addPhysics ionGasModels
+#
+#
+# Cuts for the particles  (incomplete list, see README)
+#
+#
+#  /ActarSim/phys/setGCut 0.1
+#  /ActarSim/phys/setECut 0.1
+#  /ActarSim/phys/setPCut 0.1
+#  /ActarSim/phys/setCuts 1 mm
+/ActarSim/phys/verbose 0
+#
+#
+# Initialization is moved here from the main allowing PhysicsList
+#
+/run/initialize
+#
+# DETECTOR CHARACTERIZATION
+#
+# GENERAL COMMANDS
+#
+# SET THE MAIN GEOMTERY FLAG
+/ActarSim/det/SpecMATGeoIncludedFlag on          #Includes the SpecMAT geometry in the simulation
+/ActarSim/det/MaikoGeoIncludedFlag off           #Includes the Maiko geometry in the simulation
+/ActarSim/det/ACTARTPCDEMOGeoIncludedFlag off    #Includes the ACTARTPC Demonstrator geometry in the simulation
+/ActarSim/det/ACTARTPCGeoIncludedFlag off        #Includes the ACTARTPC geometry in the simulation
+#
+# Control of the material outside the chamber (by default Air)
+/ActarSim/det/setMediumMat Air
+#/ActarSim/det/setMediumMat Galactic
+#Electric and Magnetic fields
+#/ActarSim/det/setEleField 0 0 0 megavolt/m      #Defines electric field
+/ActarSim/det/setMagField 0 0 3 tesla            #Defines magnetic field  
+#
+# gas material: H2, D2, He, Ar, CF4, iC4H10
+#
+/ActarSim/det/gas/setGasPressure 1.0 bar        #Select the Gas Pressure for the Gas box
+/ActarSim/det/gas/setGasTemperature 293.15      #Select the Gas Temperature for the Gas box
+/ActarSim/det/gas/setGasMat iC4H10              #Select Material of the Gas for the Gas box
+#
+# Make a gas mixture : first select number of elements (up to 10)
+# And then set all gases with their ratio
+#/ActarSim/det/gas/mixture/GasMixture 2
+#/ActarSim/det/gas/mixture/setGasMix 1 He 0.90
+#/ActarSim/det/gas/mixture/setGasMix 2 iC4H10 0.10
+#/ActarSim/det/gas/setGasMat GasMix
+#
+# Beam shield? tube or off
+/ActarSim/det/gas/setBeamShield off
+#
+#
+# Control of the output on the ROOT file
+#all the tracks are stored (note: huge space comsumption)
+#Note: it should come before the update!!!
+/ActarSim/analControl/storeTracks off
+/ActarSim/analControl/storeTrackHistos on
+/ActarSim/analControl/storeEvents on
+/ActarSim/analControl/storeHistograms on
+/ActarSim/analControl/storeSimpleTracks on
+#/ActarSim/analControl/setMinStrideLength 0.1
+#/ActarSim/phys/stepMax 1000000.
+#
+# Update is mandatory after any material,field or detector change
+##
+/ActarSim/det/update
+/ActarSim/det/print
+#
+#
+# Control of the primary events
+#For all cases the possibility to have realistic beam distribution
+/ActarSim/gun/beamInteraction on
+/ActarSim/gun/realisticBeam on
+/ActarSim/gun/beamRadiusAtEntrance 1.0 mm
+/ActarSim/gun/emittance 200.0
+/ActarSim/gun/beamDirection 0 0 1
+/ActarSim/gun/beamPosition 0 0 -140 mm
+#
+#/ActarSim/gun/particle proton
+#/ActarSim/gun/energy 11. MeV
+#/ActarSim/gun/position 0 0 -156 mm
+#/ActarSim/gun/direction 0 0 1
+#/ActarSim/gun/time 0
+#/ActarSim/gun/polarization 0
+#/ActarSim/gun/number 1
+/ActarSim/gun/randomVertexZPosition on
+/ActarSim/gun/randomVertexZRange -140 140 mm
+#/ActarSim/gun/vertexZPosition 69 mm
+#
+# Realistic Event-Generator on
+#/ActarSim/gun/reactionFromEvGen off
+#
+# Reaction from Cine and Event-Generator
+#/ActarSim/gun/reactionFromCine off
+#/ActarSim/gun/reactionFromCrossSection off
+#
+# A) Track a particle or set of particles defined from the Particles list
+#
+# B) Track a predefined reaction from a file:
+#
+#/ActarSim/gun/reactionFromFile off
+#
+#C) Track a reacion calculated from CINE (program from W. Mittig)
+#
+#/ActarSim/gun/reactionFromCine off
+#
+#D) Track a reacion calculated from KINE
+#
+/ActarSim/gun/reactionFromKine on
+#
+/ActarSim/gun/Kine/incidentIon 6 12 6 0.0 12.
+/ActarSim/gun/Kine/targetIon 1 1 1 0.0 1.00782503207
+/ActarSim/gun/Kine/scatteredIon 6 12 6 0.0 12.
+/ActarSim/gun/Kine/recoilIon 1 1 1 0.0 1.00782503207
+#
+/ActarSim/gun/Kine/labEnergy 480 MeV
+/ActarSim/gun/Kine/randomThetaCM on
+/ActarSim/gun/Kine/randomThetaRange 0.0 180.0
+/ActarSim/gun/Kine/randomPhiAngle on
+#/ActarSim/gun/Kine/userThetaCM 20. deg
+#/ActarSim/gun/Kine/userThetaCM 100.0 deg
+#/ActarSim/gun/Kine/userPhiAngle 330. deg
+#/ActarSim/gun/Kine/vertexPosition 0. 0. 15 cm
+#
+#
+/ActarSim/event/printModulo 1000
+#
+# RUN: number of events
+/run/beamOn 2000
