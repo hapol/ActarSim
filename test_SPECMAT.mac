@@ -76,8 +76,8 @@
 /ActarSim/det/setMediumMat Air
 #/ActarSim/det/setMediumMat Galactic
 #Electric and Magnetic fields
-#/ActarSim/det/setEleField 0 0 0 megavolt/m      #Defines electric field
-/ActarSim/det/setMagField 0 0 3 tesla            #Defines magnetic field  
+/ActarSim/det/setEleField 0 0 0.001 megavolt/m      #Defines electric field
+/ActarSim/det/setMagField 0 0 3 tesla              #Defines magnetic field  
 #
 # gas material: H2, D2, He, Ar, CF4, iC4H10
 #
@@ -172,4 +172,4 @@
 /ActarSim/event/printModulo 1000
 #
 # RUN: number of events
-/run/beamOn 2000
+/run/beamOn 1000

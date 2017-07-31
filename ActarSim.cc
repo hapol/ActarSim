@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////
-//*-- AUTHOR : Hector Alvarez-Pol (hapol@fpddux.usc.es)
-//             Beatriz Fernandez (bfd@ns.ph.liv.ac.uk)
+//*-- AUTHOR : Hector Alvarez-Pol (hector.alvarez@usc.es)
+//             Beatriz Fernandez (beatriz.fernandez.dominguez@usc.es)
 //             Esther Estevez (hachebarra79@yahoo.es)
 //             Elisangela Benjamim (ebenjami@usc.es)
 //*-- Date: 03/2006
@@ -10,8 +10,8 @@
 // --------------------------------------------------------------
 // Comments:
 //    ACTARSIM is an application for the simulation of the
-//    ACTive TArget detector. 
-// 
+//    ACTive TArget detector.
+//
 // --------------------------------------------------------------
 /////////////////////////////////////////////////////////////////
 
@@ -60,15 +60,15 @@ int main(int argc,char** argv)
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ActarSimSteppingVerbose);
-  
+
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
-  
+
   // set mandatory initialization classes
   ActarSimDetectorConstruction* detector = new ActarSimDetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ActarSimPhysicsList);
-  
+
   // histogramming
   //ActarSimROOTAnalysis *analysis = new ActarSimROOTAnalysis(detector);
   ActarSimROOTAnalysis *analysis = new ActarSimROOTAnalysis();
@@ -83,7 +83,7 @@ int main(int argc,char** argv)
     // G4UIXm is an Xm based GUI.
     session = new G4UIXm(argc,argv);
 #elif defined(G4UI_USE_TCSH)
-    session = new G4UIterminal(new G4UItcsh);  
+    session = new G4UIterminal(new G4UItcsh);
 #else
     session = new G4UIterminal();
 #endif
@@ -96,14 +96,14 @@ int main(int argc,char** argv)
   G4VisManager* visManager = new ActarSimVisManager;
   visManager->Initialize();
 #endif
-  
+
   // set mandatory user action class
   runManager->SetUserAction(new ActarSimPrimaryGeneratorAction);
   runManager->SetUserAction(new ActarSimRunAction);
   ActarSimEventAction* eventaction = new ActarSimEventAction;
   runManager->SetUserAction(eventaction);
   runManager->SetUserAction(new ActarSimSteppingAction(detector,eventaction));
-  
+
   // Initialize G4 kernel -->Make it manually to allow the definition of
   //    commands in PreInit state (for instance to define the PhysicsList)
   //runManager->Initialize();
@@ -112,8 +112,8 @@ int main(int argc,char** argv)
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
   if (session) {
-    // G4UIterminal is a (dumb) terminal.      
-    //UI->ApplyCommand("/control/execute vis2.mac");    
+    // G4UIterminal is a (dumb) terminal.
+    //UI->ApplyCommand("/control/execute vis2.mac");
     UI->ApplyCommand("/control/execute gui.mac");
     session->SessionStart();
     if ( (G4UImanager::GetUIpointer()) &&
@@ -127,16 +127,13 @@ int main(int argc,char** argv)
     UI->ApplyCommand(command+fileName);
   }
 
-  // job termination 
+  // job termination
   delete analysis;
 #ifdef G4VIS_USE
   delete visManager;
 #endif
   G4cout << "RunManager deleting... "<< G4endl;
   delete runManager;
-  
+
 return 0;
 }
-  
-
-

@@ -85,13 +85,13 @@
 /ActarSim/det/setMediumMat Air                   #Selects Material outside the Chamber.
 /ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
 # Electric and Magnetic fields
-#/ActarSim/det/setEleField 0 0 0 megavolt/m          #Defines electric field
+/ActarSim/det/setEleField 0 0 0.01 megavolt/m          #Defines electric field
 /ActarSim/det/setMagField 0 0 3 tesla                #Defines magnetic field
 #
 #
 # GAS CHARACTERISTICS (options are H2, D2, He, Ar, CF4, CH4, iC4H10, set both in GasBox and GasChamber)
 #
-/ActarSim/det/gas/setGasPressure 0.5 bar         #Select the Gas Pressure for the Gas box
+/ActarSim/det/gas/setGasPressure 1.0 bar         #Select the Gas Pressure for the Gas box
 /ActarSim/det/gas/setGasTemperature 293.15       #Select the Gas Temperature for the Gas box
 /ActarSim/det/gas/setGasMat iC4H10               #Select Material of the Gas for the Gas box
 #
@@ -109,10 +109,10 @@
 #Control of the output on the ROOT file
 #all the tracks are stored (note: huge space comsumption)
 #Note: it should come before the update!!!
-/ActarSim/analControl/storeTracks on            #Stores the tracks in the output Tree
+/ActarSim/analControl/storeTracks off            #Stores the tracks in the output Tree
 /ActarSim/analControl/storeTrackHistos on       #Stores the tracks in Histograms
 /ActarSim/analControl/storeEvents on             #Stores the events in the output Tree
-/ActarSim/analControl/storeHistograms on        #Stores histograms in the output Tree
+/ActarSim/analControl/storeHistograms on       #Stores histograms in the output Tree
 /ActarSim/analControl/storeSimpleTracks on      #Stores the simple tracks in the output Tree
 #/ActarSim/analControl/setMinStrideLength 0.1     #Specifies the minimum length of the strides in the simpleTracks
 #/ActarSim/phys/stepMax 1000000.                  #Set max allowed step length for the default region
@@ -121,15 +121,15 @@
 #For all cases the possibility to have realistic beam distribution
 /ActarSim/gun/beamInteraction on                #Simulates the beam energy loss in gas
 /ActarSim/gun/realisticBeam on                  #Simulates beam emittance according to emittance parameters
-#/ActarSim/gun/emittance 200.0                   #Selects the value of the emittance [in mm mrad]
-#/ActarSim/gun/beamRadiusAtEntrance 18. mm        #Selects the beam radius at entrance of ACTAR. Used with the emittance to calculate the position and angle distributions of the beam when a realisticBeam option is set
+/ActarSim/gun/emittance 200.0                   #Selects the value of the emittance [in mm mrad]
+/ActarSim/gun/beamRadiusAtEntrance 1.0 mm       #Selects the beam radius at entrance of ACTAR. Used with the emittance to calculate the position and angle distributions of the beam when a realisticBeam option is set
 /ActarSim/gun/beamDirection 0 0 1                #Set beam momentum direction
 /ActarSim/gun/beamPosition 0 0 -140 mm           #Set beam starting position
-/ActarSim/gun/randomTheta off                   #Select a random Theta angle for the scattered particle
-/ActarSim/gun/randomThetaVal 0 180              #Sets the limits in the Theta angle for the scattered particle. The value is randomly chosen between the limits
-/ActarSim/gun/randomPhi off                        #Select a random Phi angle for the scattered particle
-/ActarSim/gun/randomPhiVal 0 360                #Sets the limits in the Phi angle for the scattered particle. The value is randomly chosen between the limits
-/ActarSim/gun/alphaSource off                    #CHECK THIS COMMAND!! TODO
+#/ActarSim/gun/randomTheta off                   #Select a random Theta angle for the scattered particle
+#/ActarSim/gun/randomThetaVal 0 180              #Sets the limits in the Theta angle for the scattered particle. The value is randomly chosen between the limits
+#/ActarSim/gun/randomPhi off                        #Select a random Phi angle for the scattered particle
+#/ActarSim/gun/randomPhiVal 0 360                #Sets the limits in the Phi angle for the scattered particle. The value is randomly chosen between the limits
+#/ActarSim/gun/alphaSource off                    #CHECK THIS COMMAND!! TODO
 #
 # A) Track a particle or set of particles defined from the Particles list
 #
@@ -144,14 +144,14 @@
 #/ActarSim/gun/ion 6 13 6 0.0 13.00335483778
 #/ActarSim/gun/ion 12 24 12 0.0 23.985041699
 #/ActarSim/gun/ion 26 56 26 0.0 55.934937475
-/ActarSim/gun/energy 100. MeV                   #Sets the kinetic energy of the primary particle
+#/ActarSim/gun/energy 1000. MeV                  #Sets the kinetic energy of the primary particle
 #/ActarSim/gun/position 0 0 0                   #Set starting position of the particle
 #/ActarSim/gun/direction 0 0 1                  #Set momentum direction. Direction does not need to be a unit vector
 #Set starting position of the particle
 #/ActarSim/gun/polarization 0 0 0                #Set polarization
 #/ActarSim/gun/number 1                          #Set number of particles to be generated in a single event
-#/ActarSim/gun/randomVertexZPosition off         #Randomize the reaction vertex Z position
-#/ActarSim/gun/randomVertexZRange 50 200 mm     #Set the min and max Z-value of random vertex position. The value is randomly chosen between the limits
+/ActarSim/gun/randomVertexZPosition on         #Randomize the reaction vertex Z position
+/ActarSim/gun/randomVertexZRange -140 140 mm     #Set the min and max Z-value of random vertex position. The value is randomly chosen between the limits
 #/ActarSim/gun/vertexZPosition 150 mm           #Set the Z-value of the reaction vertex
 #
 # B) Track a predefined reaction from a file, or predefined cross sections:
@@ -197,16 +197,11 @@
 #/ActarSim/gun/Kine/recoilIon 1 2 1 0.0 2.0141
 #/ActarSim/gun/Kine/recoilIon 8 14 8 0.0 14.00859625    #Set properties of recoil ion to be generated
 
-/ActarSim/gun/time 0
+#/ActarSim/gun/time 0
 #/ActarSim/gun/polarization 0
-/ActarSim/gun/number 1
-/ActarSim/gun/randomVertexZPosition on
-#/ActarSim/gun/randomVertexZRange 10 128 mm
-/ActarSim/gun/randomVertexZRange -140 140 mm
-#/ActarSim/gun/vertexZPosition 72 mm
-
+#/ActarSim/gun/number 1
 #/ActarSim/gun/energy 80 MeV
-/ActarSim/gun/Kine/labEnergy 100. MeV
+/ActarSim/gun/Kine/labEnergy 120. MeV
 /ActarSim/gun/Kine/randomThetaCM on
 /ActarSim/gun/Kine/randomThetaRange 0.0 180.0
 /ActarSim/gun/Kine/randomPhiAngle on
