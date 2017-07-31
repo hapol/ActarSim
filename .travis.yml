@@ -1,0 +1,14 @@
+language: cpp
+sudo: false
+compiler:
+  - clang
+  - gcc
+platform:
+  - x86
+  - x64
+os:
+  - linux
+  - osx
+notifications:
+  email:
+    - hector.alvarez@usc.es
