@@ -9,6 +9,12 @@ platform:
 os:
   - linux
   - osx
+before_script:
+  - mkdir build
+  - cd build
+  - cmake -DGeant4_DIR=/pathToGeant4Instalation/lib/Geant ..
+script:
+  - make && make install
 notifications:
   email:
     - hector.alvarez@usc.es
