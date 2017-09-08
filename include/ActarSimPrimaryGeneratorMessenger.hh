@@ -40,6 +40,7 @@ private:
   G4UIcmdWithAString*          beamInteractionCmd;     ///< Simulates the beam energy loss in gas.
   G4UIcmdWithAString*          reactionFromFileCmd;    ///< Select a reaction from an input file
   G4UIcmdWithAString*          reactionFromCrossSectionCmd; ///< DO NOT USE. Simulates beam/target from the cross-sections. DO NOT USE.
+  G4UIcmdWithAString*          gammaGenTestCmd;   ///TEST: Simulates gamma (+proton) emission after stopping a beam in the gas.
   G4UIcmdWithAString*          reactionFromEvGenCmd;   ///< DO NOT USE. Simulates beam/target from event generator. DO NOT USE.
   G4UIcmdWithAString*          reactionFromCineCmd;    ///< Select a reaction using Cine
   G4UIcmdWithAString*          reactionFileCmd;        ///< Select the reaction definition file.

@@ -12,6 +12,7 @@
 /gui/addButton g4file vis_kine "/control/execute vis_kine.mac"
 /gui/addButton g4file vis_simpleBox "/control/execute vis_simpleBox.mac"
 /gui/addButton g4file vis_simpleTube "/control/execute vis_simpleTube.mac"
+/gui/addButton g4file vis_gammaTest "/control/execute vis_gammaTest.mac"
 /gui/addButton g4file Continue continue
 /gui/addButton g4file Exit "exit"
 #
@@ -43,7 +44,7 @@
 
 # Gun menu :
 /gui/addMenu gun Gun
-/gui/addButton gun "Beam (particle)" /ActarSim/gun/particle 
+/gui/addButton gun "Beam (particle)" /ActarSim/gun/particle
 /gui/addButton gun "Beam (ion)" /ActarSim/gun/ion
 #/gui/addButton gun "proton" /ActarSim/gun/ion 1 1 1 0.0 1.00782503207
 #/gui/addButton gun "alpha" /ActarSim/gun/ion 2 4 2 0.0 4.00260325415

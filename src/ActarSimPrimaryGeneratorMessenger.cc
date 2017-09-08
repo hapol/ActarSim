@@ -43,6 +43,7 @@
 /// - /ActarSim/gun/beamPhi
 /// - /ActarSim/gun/beamPosition
 /// - /ActarSim/gun/beamRadiusAtEntrance
+/// - /ActarSim/gun/gammaGenTest
 /// - /ActarSim/gun/reactionFromEvGen
 /// - /ActarSim/gun/reactionFromFile
 /// - /ActarSim/gun/reactionFromCrossSection
@@ -178,6 +179,14 @@ ActarSimPrimaryGeneratorMessenger::ActarSimPrimaryGeneratorMessenger(ActarSimPri
   beamRadiusAtEntranceCmd->SetUnitCategory("Length");
   beamRadiusAtEntranceCmd->SetDefaultValue(1.);
   beamRadiusAtEntranceCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  gammaGenTestCmd = new G4UIcmdWithAString("/ActarSim/gun/gammaGenTest",this);
+  gammaGenTestCmd->SetGuidance("TEST: Simulates gamma (+proton) emission after stopping a beam in the gas.");
+  gammaGenTestCmd->SetGuidance("  Choice : on, off(default)");
+  gammaGenTestCmd->SetParameterName("choice",true);
+  gammaGenTestCmd->SetDefaultValue("off");
+  gammaGenTestCmd->SetCandidates("on off");
+  gammaGenTestCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //HAPOL NOTE: REMOVE OR REBUILT COMPLETELY
   reactionFromEvGenCmd = new G4UIcmdWithAString("/ActarSim/gun/reactionFromEvGen",this);
@@ -696,6 +705,7 @@ ActarSimPrimaryGeneratorMessenger::~ActarSimPrimaryGeneratorMessenger() {
   delete beamDirectionCmd;
   delete beamPositionCmd;
   delete beamRadiusAtEntranceCmd;
+  delete gammaGenTestCmd;
   delete reactionFromEvGenCmd;
   delete reactionFromCrossSectionCmd;
   delete reactionFromFileCmd;
@@ -774,6 +784,9 @@ void ActarSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
 
   if(command == beamRadiusAtEntranceCmd)
     actarSimActionGun->SetBeamRadiusAtEntrance(beamRadiusAtEntranceCmd->GetNewDoubleValue(newValues));
+
+  if( command == gammaGenTestCmd )
+    actarSimActionGun->SetGammaGenTestFlag(newValues);
 
   if( command == reactionFromEvGenCmd )
     actarSimActionGun->SetReactionFromEvGenFlag(newValues);

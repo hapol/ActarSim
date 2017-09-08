@@ -80,8 +80,9 @@ private:
   G4String  randomPhiFlag;                ///< Flag for a random phi angle in CINE
   G4String  alphaSourceFlag;              ///< Flag for a alpha source emitter
   G4String  reactionFile;                 ///< File definition for a reaction
-
+  G4String  gammaGenTestFlag;                 ///< File definition for a reaction
   G4String  reactionFromKineFlag;  ///< Flag for using KINE
+
   G4double  thetaCMAngle;          ///< Center of mass polar angle
   G4double  userThetaAngle;        ///< User theta angle
   G4double  userPhiAngle;          ///< User phi angle
@@ -192,6 +193,7 @@ public:
   void SetAlphaSourceFlag(G4String val) { alphaSourceFlag = val;}
   void SetReactionFile(G4String val) { reactionFile = val;}
 
+  void SetGammaGenTestFlag(G4String val) { gammaGenTestFlag = val;}
   //virtual void SetInitialValues();
 
   void SetEmittance(G4double val){emittance = val;}

@@ -140,7 +140,13 @@ ActarSimPrimaryGeneratorAction::~ActarSimPrimaryGeneratorAction() {
 /// - CASE E Reaction products kinematics calculated using Kine
 ///   [ corresponds to line else if(reactionFromKineFlag == "on"){  ].
 ///
+/// - CASE G (TEST) Reaction products of a gamma emission from a stopped
+///    beam species, either after a proton emission or direct (test case
+///    for A. Benitez proposal on 46Mn beta decay to 46Cr, study of branching
+///    ratio of compiting modes)
+///
 /// - CASE F  Particle selected manually (using the messenger commands)
+
 void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   const G4int verboseLevel = G4RunManager::GetRunManager()->GetVerboseLevel();
   if(verboseLevel>0)
@@ -1033,6 +1039,40 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     }//end if(ExEnergyScattered>0)
   }
 
+  /// - CASE G (TEST) Reaction products of a gamma emission from a stopped
+  ///    beam species, either after a proton emission or direct (test case)
+  ///    for A. Benitez proposal on 46Mn beta decay to 46Cr, study of branching
+  ///    ratio of compiting modes)
+  else if(gammaGenTestFlag == "on"){
+    if(verboseLevel>0){
+      G4cout << G4endl
+             << " *************************************************** " << G4endl
+             << " * ActarSimPrimaryGeneratorAction::GeneratePrimaries() " << G4endl
+             << " * gammaGenTestFlag = on                               " << G4endl
+             << " * Reaction products of a gamma emission from a stopped" << G4endl
+             << " * beam species, either after a proton emission or     " << G4endl
+             << " * direct (test case for A. Benitez proposal          " << G4endl
+             << " * on 46Mn beta decay to 46Cr, study of branching      " << G4endl
+             << " * ratio of compiting modes)"  << G4endl;
+      G4cout << " *************************************************** "<< G4endl;
+    }
+
+    G4String particleName;
+    particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="gamma"));
+    G4double cosTheta_gamma;
+    G4double phi_gamma = twopi*G4UniformRand();
+    G4double sinTheta_gamma;
+    cosTheta_gamma = -1.0 + 2.0*G4UniformRand();
+    sinTheta_gamma = sqrt(1 - cosTheta_gamma*cosTheta_gamma);
+    particleGun->SetParticleEnergy(0.2*MeV);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(sinTheta_gamma*cos(phi_gamma),
+                                                            sinTheta_gamma*sin(phi_gamma),
+                                                            cosTheta_gamma));
+    particleGun->SetParticlePolarization(zero);
+    particleGun->SetParticlePosition(vertexPosition);
+  	particleGun->SetParticleTime(0.0);
+  	particleGun->GeneratePrimaryVertex(anEvent);
+  }
   // CASE F  Particle selected manually (using the messenger commands)
   else{
     if(verboseLevel>0){
