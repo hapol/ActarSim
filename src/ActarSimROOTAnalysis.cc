@@ -19,6 +19,7 @@
 #include "ActarSimROOTAnalSilRing.hh"
 #include "ActarSimROOTAnalSciRing.hh"
 #include "ActarSimROOTAnalPla.hh"
+#include "ActarSimROOTAnalExogam.hh"
 
 #include "ActarSimDetectorConstruction.hh"
 #include "ActarSimAnalysisMessenger.hh"
@@ -101,6 +102,7 @@ ActarSimROOTAnalysis::ActarSimROOTAnalysis():
   sciAnal = 0;
   sciRingAnal = 0;
   plaAnal = 0;
+  exoAnal = 0;
 
   gasAnalIncludedFlag = 0;
   silAnalIncludedFlag = 0;
@@ -108,6 +110,7 @@ ActarSimROOTAnalysis::ActarSimROOTAnalysis():
   sciAnalIncludedFlag = 0;
   sciRingAnalIncludedFlag = 0;
   plaAnalIncludedFlag = 0;
+  exoAnalIncludedFlag = 0;
 
   theData = new ActarSimData();
   pBeamInfo = new ActarSimBeamInfo();
@@ -175,6 +178,9 @@ void ActarSimROOTAnalysis::InitAnalysisForExistingDetectors() {
 
   if(plaAnalIncludedFlag && !plaAnal)
     plaAnal = new ActarSimROOTAnalPla();
+
+  if(exoAnalIncludedFlag && !exoAnal)
+    exoAnal = new ActarSimROOTAnalExogam();
 
   //OTHER DETECTORS ANALYSIS SHOULD BE INCLUDED HERE
   OnceAWhileDoIt();
@@ -300,6 +306,7 @@ void ActarSimROOTAnalysis::GeneratePrimaries(const G4Event *anEvent,
   if(sciAnal) sciAnal->GeneratePrimaries(anEvent);
   if(sciRingAnal) sciRingAnal->GeneratePrimaries(anEvent);
   if(plaAnal) plaAnal->GeneratePrimaries(anEvent);
+  if(exoAnal) exoAnal->GeneratePrimaries(anEvent);
 
   OnceAWhileDoIt();
 }
@@ -371,6 +378,7 @@ void ActarSimROOTAnalysis::GeneratePrimaries(const G4Event *anEvent, ActarSimBea
   if(sciAnal) sciAnal->GeneratePrimaries(anEvent);
   if(sciRingAnal) sciRingAnal->GeneratePrimaries(anEvent);
   if(plaAnal) plaAnal->GeneratePrimaries(anEvent);
+  if(exoAnal) exoAnal->GeneratePrimaries(anEvent);
 
   OnceAWhileDoIt();
 }
@@ -480,6 +488,7 @@ void ActarSimROOTAnalysis::BeginOfRunAction(const G4Run *aRun) {
   if(sciAnal) sciAnal->BeginOfRunAction(aRun);
   if(sciRingAnal) sciRingAnal->BeginOfRunAction(aRun);
   if(plaAnal) plaAnal->BeginOfRunAction(aRun);
+  if(exoAnal) exoAnal->BeginOfRunAction(aRun);
 
   simFile->cd();
 
@@ -516,6 +525,7 @@ void ActarSimROOTAnalysis::BeginOfEventAction(const G4Event *anEvent){
   if(sciAnal) sciAnal->BeginOfEventAction(anEvent);
   if(sciAnal) sciAnal->BeginOfEventAction(anEvent);
   if(plaAnal) plaAnal->BeginOfEventAction(anEvent);
+  if(exoAnal) exoAnal->BeginOfEventAction(anEvent);
 
   OnceAWhileDoIt();
 }
@@ -586,6 +596,7 @@ void ActarSimROOTAnalysis::EndOfEventAction(const G4Event *anEvent) {
   if(sciAnal) sciAnal->EndOfEventAction(anEvent);
   if(sciRingAnal) sciRingAnal->EndOfEventAction(anEvent);
   if(plaAnal) plaAnal->EndOfEventAction(anEvent);
+  if(exoAnal) exoAnal->EndOfEventAction(anEvent);
 
   if(pBeamInfo->GetStatus()==0){  // pBeamInfo==0 at end of the event in the "fragments event" (pBeamInfo==2 in beam events )
     //There is only one clone of theData..
@@ -648,6 +659,7 @@ void ActarSimROOTAnalysis::UserSteppingAction(const G4Step *aStep){
   if(sciAnal) sciAnal->UserSteppingAction(aStep);
   if(sciRingAnal) sciRingAnal->UserSteppingAction(aStep);
   if(plaAnal) plaAnal->UserSteppingAction(aStep);
+  if(exoAnal) exoAnal->UserSteppingAction(aStep);
 
   // Processing the beam, in case of beamInteractionFlag on
   // If a beam ion is being tracked with status 1 (ion beam being tracked) and if the present

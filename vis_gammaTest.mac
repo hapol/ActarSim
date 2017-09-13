@@ -1,7 +1,7 @@
 ################################################################
 #*-- AUTHOR : Hector Alvarez-Pol
 #*-- Date: 05/2005
-#*-- Last Update: 08/09/17
+#*-- Last Update: 13/09/17
 #*-- Copyright: GENP (Univ. Santiago de Compostela)
 # --------------------------------------------------------------
 # Comments:
@@ -72,6 +72,9 @@
 /ActarSim/det/sil/yBoxHalfLength 0. mm           #Sets the y half length of the silicon detectors box
 /ActarSim/det/sil/zBoxHalfLength 46.8 mm         #Sets the z half length of the silicon detectors box
 /ActarSim/det/sil/print                          #Prints geometry
+#
+# EXOGAM DETECTOR (valid if /ActarSim/det/exogamGeoIncludedFlag on has been settled)
+/ActarSim/det/exogamGeoIncludedFlag on
 #
 # Update is MANDATORY after any material, field or detector change
 /ActarSim/det/update                             #Updates geometry
@@ -213,4 +216,4 @@
 #
 # RUN: number of events
 #
-#/run/beamOn 100
+/run/beamOn 10000

@@ -56,6 +56,7 @@ ActarSimROOTAnalExogam::ActarSimROOTAnalExogam() {
   exogamHitCA = new TClonesArray("ActarSimExogamHit",2);
 
   exogamHitsBranch = eventTree->Branch("exogamHits",&exogamHitCA);
+  exogamHitsBranch->SetAutoDelete(kTRUE);
 }
 
 //////////////////////////////////////////////////////////////////

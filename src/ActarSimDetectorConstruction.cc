@@ -379,6 +379,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
     if (gasGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetGasAnalOn();
     if (silGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetSilAnalOn();
     if (sciGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetSciAnalOn();
+    if (exogamGeoIncludedFlag=="on") gActarSimROOTAnalysis->SetExogamAnalOn();
     gActarSimROOTAnalysis->InitAnalysisForExistingDetectors();
   }
 

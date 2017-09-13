@@ -42,6 +42,7 @@ class ActarSimROOTAnalSilRing;
 class ActarSimROOTAnalSci;
 class ActarSimROOTAnalSciRing;
 class ActarSimROOTAnalPla;
+class ActarSimROOTAnalExogam;
 
 class ActarSimDetectorConstruction;
 class ActarSimPrimaryGeneratorAction;
@@ -70,6 +71,7 @@ private:
   ActarSimROOTAnalSci* sciAnal;         ///< Pointer to detector specific (scintillator) analysis class
   ActarSimROOTAnalSciRing* sciRingAnal; ///< Pointer to detector specific (scintillator ring) analysis class
   ActarSimROOTAnalPla* plaAnal;         ///< Pointer to detector specific (plastic) analysis class
+  ActarSimROOTAnalExogam* exoAnal;      ///< Pointer to detector specific (exogam) analysis class
 
   ActarSimBeamInfo* pBeamInfo;          ///< Pointer to beam information object
 
@@ -106,6 +108,7 @@ private:
   G4int sciAnalIncludedFlag;     ///< Flag to turn on(1)/off(0) the scintillator analysis
   G4int sciRingAnalIncludedFlag; ///< Flag to turn on(1)/off(0) the scintillator ring analysis
   G4int plaAnalIncludedFlag;     ///< Flag to turn on(1)/off(0) the plastic analysis
+  G4int exoAnalIncludedFlag;     ///< Flag to turn on(1)/off(0) the exogam analysis
 
 public:
   ActarSimROOTAnalysis();
@@ -136,11 +139,13 @@ public:
   void SetSciAnalOn(){sciAnalIncludedFlag=1;}
   void SetSciRingAnalOn(){sciRingAnalIncludedFlag=1;}
   void SetPlaAnalOn(){plaAnalIncludedFlag=1;}
+  void SetExogamAnalOn(){exoAnalIncludedFlag=1;}
   void SetGasAnalOff(){gasAnalIncludedFlag=0;}
   void SetSilAnalOff(){silAnalIncludedFlag=0;}
   void SetSciAnalOff(){sciAnalIncludedFlag=0;}
   void SetSciRingAnalOff(){sciRingAnalIncludedFlag=0;}
   void SetPlaAnalOff(){plaAnalIncludedFlag=0;}
+  void SetExogamAnalOff(){exoAnalIncludedFlag=0;}
 
   //Messenger actions
   void SetStoreTracksFlag(G4String val) {storeTracksFlag = val;};
@@ -163,6 +168,7 @@ public:
   G4int GetSciAnalStatus(){return sciAnalIncludedFlag;}
   G4int GetSciRingAnalStatus(){return sciRingAnalIncludedFlag;}
   G4int GetPlaAnalStatus(){return plaAnalIncludedFlag;}
+  G4int GetExogamAnalStatus(){return exoAnalIncludedFlag;}
 
   void InitAnalysisForExistingDetectors();
   void SetMinStrideLength(Double_t value);

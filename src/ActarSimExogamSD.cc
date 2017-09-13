@@ -25,6 +25,8 @@
 #include "G4TouchableHistory.hh"
 #include "G4VTouchable.hh"
 
+using namespace std;
+
 //////////////////////////////////////////////////////////////////
 /// Constructor, just naming the Hit collection
 ActarSimExogamSD::ActarSimExogamSD(G4String name):G4VSensitiveDetector(name) {
