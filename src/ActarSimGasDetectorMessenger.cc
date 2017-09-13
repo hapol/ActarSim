@@ -57,8 +57,7 @@ ActarSimGasDetectorMessenger::
 ActarSimGasDetectorMessenger(ActarSimDetectorConstruction* ActarSimDet,ActarSimGasDetectorConstruction* ActarSimGasDet)
   :ActarSimDetector(ActarSimDet), ActarSimGasDetector(ActarSimGasDet){
 
-  if(ActarSimDetector)
-    ; //avoid compiler warning message 
+  if(ActarSimDetector) {;} //avoid compiler warning message 
 
   detDir = new G4UIdirectory("/ActarSim/det/gas/");
   detDir->SetGuidance("gas detector control");

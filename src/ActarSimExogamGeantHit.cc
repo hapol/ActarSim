@@ -112,10 +112,10 @@ void ActarSimExogamGeantHit::Print(){
 	 << ", postDetName: " << postDetName
 	 << ", preDetName: " << preDetName
 	 << G4endl;
-  G4cout << "edep: " << edep  / MeV << " MeV"
+  G4cout << "edep: " << edep  / CLHEP::MeV << " MeV"
 	 << ", pos: " << pos << " mm" << G4endl
 	 << ", prePos: " << prePos << " mm" << G4endl;
-  G4cout << "toF: " << toF  / ns << " ns" << ", localPos: " << localPos << " mm"
+  G4cout << "toF: " << toF  / CLHEP::ns << " ns" << ", localPos: " << localPos << " mm"
 	 << ", localPrePos: " << localPrePos << " mm" << G4endl;
   G4cout << "##################################################################"
 	 << G4endl;

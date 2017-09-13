@@ -362,8 +362,8 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
   G4double density, a, z;
   G4Material* Vacuum =
-    new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
-                   kStateGas, 3.e-18*pascal, 2.73*kelvin);
+    new G4Material("Galactic", z=1., a=1.01*CLHEP::g/CLHEP::mole,density= CLHEP::universe_mean_density,
+                   kStateGas, 3.e-18*CLHEP::pascal, 2.73*CLHEP::kelvin);
   Vacuum->SetChemicalFormula("NOMATTER");
 
   G4Box* solidAlu1 = new G4Box("Alu1",xHalfLengthAlu1,yHalfLengthAlu1,

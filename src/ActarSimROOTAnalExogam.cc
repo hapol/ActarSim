@@ -37,6 +37,9 @@
 #include "TFile.h"
 #include "TClonesArray.h"
 
+#include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Units/SystemOfUnits.h"
+
 //////////////////////////////////////////////////////////////////
 /// Constructor
 ActarSimROOTAnalExogam::ActarSimROOTAnalExogam() {
@@ -216,14 +219,14 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
 
     cHit->SetDetectorID(gHit->GetDetID());
 
-    cHit->SetXPos(gHit->GetLocalPrePos().x()/mm);
-    cHit->SetYPos(gHit->GetLocalPrePos().y()/mm);
-    cHit->SetZPos(gHit->GetLocalPrePos().z()/mm);
+    cHit->SetXPos(gHit->GetLocalPrePos().x()/CLHEP::mm);
+    cHit->SetYPos(gHit->GetLocalPrePos().y()/CLHEP::mm);
+    cHit->SetZPos(gHit->GetLocalPrePos().z()/CLHEP::mm);
 
-    cHit->SetTime(gHit->GetToF()/ns);
-    cHit->SetEnergy(gHit->GetEdep()/MeV);
-    cHit->SetEBeforeExogam(gHit->GetEBeforeExogam()/MeV);
-    cHit->SetEAfterExogam(gHit->GetEAfterExogam()/MeV);
+    cHit->SetTime(gHit->GetToF()/CLHEP::ns);
+    cHit->SetEnergy(gHit->GetEdep()/CLHEP::MeV);
+    cHit->SetEBeforeExogam(gHit->GetEBeforeExogam()/CLHEP::MeV);
+    cHit->SetEAfterExogam(gHit->GetEAfterExogam()/CLHEP::MeV);
 
     cHit->SetTrackID(gHit->GetTrackID());
     cHit->SetEventID(GetTheEventID());
@@ -237,11 +240,11 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
 
   } else if(mode==1) { //addition
 
-    cHit->SetEnergy(cHit->GetEnergy() + gHit->GetEdep()/ MeV);
+    cHit->SetEnergy(cHit->GetEnergy() + gHit->GetEdep()/ CLHEP::MeV);
     //taking the smaller outgoing energy of the geantHits
-    if(cHit->GetEAfterExogam()>gHit->GetEAfterExogam()) cHit->SetEAfterExogam(gHit->GetEAfterExogam()/MeV);
+    if(cHit->GetEAfterExogam()>gHit->GetEAfterExogam()) cHit->SetEAfterExogam(gHit->GetEAfterExogam()/CLHEP::MeV);
     //taking the larger incoming energy of the geantHits
-    if(cHit->GetEBeforeExogam()<gHit->GetEBeforeExogam()) cHit->SetEBeforeExogam(gHit->GetEBeforeExogam()/MeV);
+    if(cHit->GetEBeforeExogam()<gHit->GetEBeforeExogam()) cHit->SetEBeforeExogam(gHit->GetEBeforeExogam()/CLHEP::MeV);
 
     cHit->SetStepsContributing(cHit->GetStepsContributing()+1);
     // The mean value of a distribution {x_i} can also be computed iteratively
@@ -255,7 +258,7 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
 		  (gHit->GetLocalPrePos().z()-cHit->GetZPos())/((G4double)cHit->GetStepsContributing()));
 
     //taking the shorter time of the geantHits
-    if(gHit->GetToF()<cHit->GetTime()) cHit->SetTime(gHit->GetToF()/ns);
+    if(gHit->GetToF()<cHit->GetTime()) cHit->SetTime(gHit->GetToF()/CLHEP::ns);
 
   }
 }
