@@ -1064,7 +1064,8 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     G4double sinTheta_gamma;
     cosTheta_gamma = -1.0 + 2.0*G4UniformRand();
     sinTheta_gamma = sqrt(1 - cosTheta_gamma*cosTheta_gamma);
-    particleGun->SetParticleEnergy(0.2*MeV);
+    //particleGun->SetParticleEnergy(0.2*MeV);
+    particleGun->SetParticleEnergy(2.2*MeV);
     particleGun->SetParticleMomentumDirection(G4ThreeVector(sinTheta_gamma*cos(phi_gamma),
                                                             sinTheta_gamma*sin(phi_gamma),
                                                             cosTheta_gamma));

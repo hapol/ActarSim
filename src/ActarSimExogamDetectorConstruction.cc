@@ -762,10 +762,75 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //------------------------------------------------
   // Sensitive detectors
   //------------------------------------------------
-  logicAlu1->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  //logicAlu1->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer1 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer2 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer3 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer4 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer5 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer6 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer7 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer8 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer9 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer10->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer11->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer12->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer13->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer14->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer15->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer16->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer17->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer18->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer19->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer20->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer21->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer22->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer23->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer24->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer25->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer26->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer27->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer28->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer29->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer20->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer31->SetSensitiveDetector( detConstruction->GetExogamSD() );
+  logicGer32->SetSensitiveDetector( detConstruction->GetExogamSD() );
 
 
-  return physiAlu1;
+  //return physiAlu1;
+  return physiGer1;
+  return physiGer2;
+  return physiGer3;
+  return physiGer4;
+  return physiGer5;
+  return physiGer6;
+  return physiGer7;
+  return physiGer8;
+  return physiGer9;
+  return physiGer10;
+  return physiGer11;
+  return physiGer12;
+  return physiGer13;
+  return physiGer14;
+  return physiGer15;
+  return physiGer16;
+  return physiGer17;
+  return physiGer18;
+  return physiGer19;
+  return physiGer20;
+  return physiGer21;
+  return physiGer22;
+  return physiGer23;
+  return physiGer24;
+  return physiGer25;
+  return physiGer26;
+  return physiGer27;
+  return physiGer28;
+  return physiGer29;
+  return physiGer30;
+  return physiGer31;
+  return physiGer32;
+
 }
 
 //////////////////////////////////////////////////////////////////

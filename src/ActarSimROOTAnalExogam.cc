@@ -202,7 +202,7 @@ void ActarSimROOTAnalExogam::FillingHits(const G4Event *anEvent) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 ///  Function to move the information from the ActarSimExogamGeantHit
-/// (a step hit) to ActarSimSciHit (an event hit)
+/// (a step hit) to ActarSimExogamHit (an event hit)
 /// Two modes are possible:
 /// - mode == 0 : creation; the ActarSimExogamHit is void and is
 ///             filled by the data from the ActarSimExogamGeantHit
@@ -214,9 +214,6 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
 				       G4int mode) {
 
   if(mode == 0) { //creation
-    if( gHit->GetDetName() == "physiAlu1" )   ; //cHit->SetType(1);
-    else G4cout << "ERROR in ActarSimROOTAnalExogam::AddCalExogamHit()." << G4endl
-                << "Unknown Detector Name: "<< gHit->GetDetName() << G4endl << G4endl;
 
     cHit->SetDetectorID(gHit->GetDetID());
 
