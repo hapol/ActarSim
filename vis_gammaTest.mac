@@ -47,7 +47,8 @@
 /ActarSim/det/ACTARTPCGeoIncludedFlag on        #Includes the ACTARTPC geometry in the simulation
 # Control of the materials (options: Galactic, Water, ...)
 /ActarSim/det/setMediumMat Air                   #Selects Material outside the Chamber.
-/ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
+#/ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
+/ActarSim/det/setChamberMat Aluminium             #Selects Material in the Chamber (but not in the gas!)
 #
 # GAS CHARACTERISTICS (options are H2, D2, He, Ar, CF4, CH4, iC4H10, set both in GasBox and GasChamber)
 #
@@ -216,4 +217,4 @@
 #
 # RUN: number of events
 #
-/run/beamOn 10000
+#/run/beamOn 10000

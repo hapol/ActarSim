@@ -293,9 +293,11 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   //also selectable using /ActarSim/det/setXLengthGasChamber... in the macros
   //Last sentence is not true if chamberSizeX,Y,Z are reinitialized here - T.M. Feb 2016
   //Increased chamber size to hold Exogam inside - P.C. Dec 2016
-  chamberSizeX = 400.*mm;
+  //chamberSizeX = 400.*mm;
+  chamberSizeX = 134.*mm;
   chamberSizeY = 105.*mm;
-  chamberSizeZ = 400.*mm;
+  //chamberSizeZ = 400.*mm;
+  chamberSizeZ = 134.*mm;
 
   //Chamber X,Y,Z Center
   chamberCenterX = 0.*m;

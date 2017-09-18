@@ -221,19 +221,19 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //    Position Vectors
 
 //Alu1 = Clover #0
-  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+20.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
+  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
 //  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
 
 #ifdef REPLICAS_CLOVER
 //Alu2 = Clover #1
-  G4ThreeVector positionAlu2 = G4ThreeVector(0.*CLHEP::cm,(zHalfLengthAlu1+10.25*CLHEP::cm),0.*CLHEP::cm);
+  G4ThreeVector positionAlu2 = G4ThreeVector(0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm);
 //  G4ThreeVector positionAlu2 = G4ThreeVector(0.*CLHEP::cm,(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm);
 //Alu3 = Clover #2
-  G4ThreeVector positionAlu3 = G4ThreeVector((zHalfLengthAlu1+20.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
+  G4ThreeVector positionAlu3 = G4ThreeVector((zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
 //  G4ThreeVector positionAlu3 = G4ThreeVector((zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
 //Alu4 = Clover =3
   //G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,-(zHalfLengthAlu1+20.25*CLHEP::cm),0.*CLHEP::cm);
-  G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+20.25*CLHEP::cm));
+  G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm));
 //  G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,-(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm);
 #endif
 
