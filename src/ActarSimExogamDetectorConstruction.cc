@@ -87,8 +87,8 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::Construct(G4LogicalVolume
 G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4LogicalVolume* worldLog) {
 
   //Gas chamber position inside the chamber
-  ActarSimGasDetectorConstruction* gasDet = detConstruction->GetGasDetector();
-  G4double zGasBoxPosition=gasDet->GetGasBoxCenterZ();
+  //ActarSimGasDetectorConstruction* gasDet = detConstruction->GetGasDetector();
+  //G4double zGasBoxPosition=gasDet->GetGasBoxCenterZ();
 
 
 // =====================================================================
@@ -103,8 +103,8 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   G4double yHalfLengthAlu1 = 6.2*CLHEP::cm;
   G4double zHalfLengthAlu1 = 5.50*CLHEP::cm;  // 5.35*cm;
 
-  G4double xHalfLengthPlAlu = 4.15*CLHEP::cm;
-  G4double yHalfLengthPlAlu = 4.15*CLHEP::cm;
+  //G4double xHalfLengthPlAlu = 4.15*CLHEP::cm;
+  //G4double yHalfLengthPlAlu = 4.15*CLHEP::cm;
   G4double zHalfLengthPlAlu = (0.15/2)*CLHEP::cm;     // 1.5 mm thick
 
   G4double xHalfLengthVac1 = (2.725+0.3/5)*CLHEP::cm;
@@ -221,20 +221,16 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //    Position Vectors
 
 //Alu1 = Clover #0
-  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
-//  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
+  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,-5.5*CLHEP::cm);
 
 #ifdef REPLICAS_CLOVER
-//Alu2 = Clover #1
-  G4ThreeVector positionAlu2 = G4ThreeVector(0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm);
-//  G4ThreeVector positionAlu2 = G4ThreeVector(0.*CLHEP::cm,(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm);
-//Alu3 = Clover #2
-  G4ThreeVector positionAlu3 = G4ThreeVector((zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
-//  G4ThreeVector positionAlu3 = G4ThreeVector((zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm,0.*CLHEP::cm);
-//Alu4 = Clover =3
-  //G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,-(zHalfLengthAlu1+20.25*CLHEP::cm),0.*CLHEP::cm);
-  G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm));
-//  G4ThreeVector positionAlu4 = G4ThreeVector(0.*CLHEP::cm,-(zHalfLengthAlu1+5.25*CLHEP::cm),0.*CLHEP::cm);
+  G4ThreeVector positionAlu2 = G4ThreeVector(-(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm, 5.5*CLHEP::cm);
+
+  G4ThreeVector positionAlu3 = G4ThreeVector( (zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,-5.5*CLHEP::cm);
+  G4ThreeVector positionAlu4 = G4ThreeVector( (zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm, 5.5*CLHEP::cm);
+
+  G4ThreeVector positionAlu5 = G4ThreeVector( -5.5*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm));
+  G4ThreeVector positionAlu6 = G4ThreeVector(  5.5*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+13.25*CLHEP::cm));
 #endif
 
 //PlAlu
@@ -329,8 +325,10 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   rmAlu2 = rmAluZ2*rmAlu3 ;
 
   G4RotationMatrix rmAlu4; // Alu4
-  //rmAlu4 = rmAluZ2*rmAlu1 ;
   rmAlu4.rotateZ(M_PI*(-1./2.));
+
+  G4RotationMatrix rmAlu5; // Alu5
+  rmAlu5.rotateZ(M_PI*(-1./2.));
 
 #endif
 
@@ -369,12 +367,16 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   G4Box* solidAlu1 = new G4Box("Alu1",xHalfLengthAlu1,yHalfLengthAlu1,
                                                      zHalfLengthAlu1);
   G4LogicalVolume* logicAlu1 = new G4LogicalVolume(solidAlu1,Vacuum,"Alu1");
-  G4VPhysicalVolume* physiAlu1 = new G4PVPlacement(G4Transform3D(rmAlu1,positionAlu1),logicAlu1,"Alu1",worldLog,false,0);
+  G4VPhysicalVolume* physiAlu1 = new G4PVPlacement(G4Transform3D(rmAlu1,positionAlu1),logicAlu1,"Alu1",worldLog,false,0); //coupled to Alu2
 
 #ifdef REPLICAS_CLOVER
-   //G4VPhysicalVolume* physiAlu2 = new G4PVPlacement(G4Transform3D(rmAlu2,positionAlu2),logicAlu1,"Alu2",worldLog,false,1);
-   G4VPhysicalVolume* physiAlu3 = new G4PVPlacement(G4Transform3D(rmAlu3,positionAlu3),logicAlu1,"Alu3",worldLog,false,2);
-   G4VPhysicalVolume* physiAlu4 = new G4PVPlacement(G4Transform3D(rmAlu4,positionAlu4),logicAlu1,"Alu4",worldLog,false,3);
+   new G4PVPlacement(G4Transform3D(rmAlu1,positionAlu2),logicAlu1,"Alu2",worldLog,false,1); //coupled to Alu1
+
+   new G4PVPlacement(G4Transform3D(rmAlu3,positionAlu3),logicAlu1,"Alu3",worldLog,false,2); //coupled to Alu4
+   new G4PVPlacement(G4Transform3D(rmAlu3,positionAlu4),logicAlu1,"Alu4",worldLog,false,3); //coupled to Alu3
+
+   new G4PVPlacement(G4Transform3D(rmAlu5,positionAlu5),logicAlu1,"Alu5",worldLog,false,4); //coupled to Alu6
+   new G4PVPlacement(G4Transform3D(rmAlu5,positionAlu6),logicAlu1,"Alu6",worldLog,false,5); //coupled to Alu5
 #endif
 
 
@@ -762,7 +764,6 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //------------------------------------------------
   // Sensitive detectors
   //------------------------------------------------
-  //logicAlu1->SetSensitiveDetector( detConstruction->GetExogamSD() );
   logicGer1 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
   logicGer2 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
   logicGer3 ->SetSensitiveDetector( detConstruction->GetExogamSD() );
@@ -797,7 +798,6 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   logicGer32->SetSensitiveDetector( detConstruction->GetExogamSD() );
 
 
-  //return physiAlu1;
   return physiGer1;
   return physiGer2;
   return physiGer3;

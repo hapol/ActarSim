@@ -29,7 +29,8 @@ class HodoParametrisation : public G4VPVParameterisation
     virtual ~HodoParametrisation();
 	
     void ComputeTransformation(const G4int copyNo,G4VPhysicalVolume *physVol) const;
-	 void ComputeDimensions (G4Box& ,const G4int copyNo,const G4VPhysicalVolume* physVol) const;
+    using G4VPVParameterisation::ComputeDimensions;
+    void ComputeDimensions (G4Box& ,const G4int copyNo,const G4VPhysicalVolume* physVol) const;
     
 
   private:  // Dummy declarations to get rid of warnings ...
@@ -43,8 +44,8 @@ class HodoParametrisation : public G4VPVParameterisation
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-	void ComputeDimensions (G4Tubs&, const G4int,const G4VPhysicalVolume * ) const{}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&, const G4int,const G4VPhysicalVolume * ) const{}
    
 
   private:

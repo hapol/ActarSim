@@ -48,13 +48,13 @@
 # Control of the materials (options: Galactic, Water, ...)
 /ActarSim/det/setMediumMat Air                   #Selects Material outside the Chamber.
 #/ActarSim/det/setChamberMat Galactic             #Selects Material in the Chamber (but not in the gas!)
-/ActarSim/det/setChamberMat Aluminium             #Selects Material in the Chamber (but not in the gas!)
 #
 # GAS CHARACTERISTICS (options are H2, D2, He, Ar, CF4, CH4, iC4H10, set both in GasBox and GasChamber)
 #
 /ActarSim/det/gas/setGasPressure 0.8 bar         #Select the Gas Pressure for the Gas box
 /ActarSim/det/gas/setGasTemperature 293.15       #Select the Gas Temperature for the Gas box
 /ActarSim/det/gas/setGasMat iC4H10               #Select Material of the Gas for the Gas box
+/ActarSim/det/setChamberMat Aluminium             #Selects Material in the Chamber (but not in the gas!)
 #
 # SILICON DETECTOR (valid if /ActarSim/det/silGeoIncludedFlag on has been settled)
 /ActarSim/det/silGeoIncludedFlag off              #Includes the geometry of the silicons in the simulation
@@ -217,4 +217,4 @@
 #
 # RUN: number of events
 #
-#/run/beamOn 10000
+/run/beamOn 10000
