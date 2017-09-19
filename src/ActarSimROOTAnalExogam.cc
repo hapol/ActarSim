@@ -217,9 +217,9 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
 
     cHit->SetDetectorID(gHit->GetDetID());
 
-    cHit->SetXPos(gHit->GetLocalPrePos().x()/CLHEP::mm);
-    cHit->SetYPos(gHit->GetLocalPrePos().y()/CLHEP::mm);
-    cHit->SetZPos(gHit->GetLocalPrePos().z()/CLHEP::mm);
+    cHit->SetXPos(gHit->GetPos().x()/CLHEP::mm);
+    cHit->SetYPos(gHit->GetPos().y()/CLHEP::mm);
+    cHit->SetZPos(gHit->GetPos().z()/CLHEP::mm);
 
     cHit->SetTime(gHit->GetToF()/CLHEP::ns);
     cHit->SetEnergy(gHit->GetEdep()/CLHEP::MeV);
@@ -249,11 +249,11 @@ void ActarSimROOTAnalExogam::AddCalExogamHit(ActarSimExogamHit* cHit,
     // if the values x_i are drawn one-by-one. After a new value x, the new mean is:
     // mean(t) = mean(t-1) + (1/t)(x-mean(t-1))
     cHit->SetXPos(cHit->GetXPos() +
-		  (gHit->GetLocalPrePos().x()-cHit->GetXPos())/((G4double)cHit->GetStepsContributing()));
+		  ((gHit->GetPos().x()/CLHEP::mm)-cHit->GetXPos())/((G4double)cHit->GetStepsContributing()));
     cHit->SetYPos(cHit->GetYPos() +
-		  (gHit->GetLocalPrePos().y()-cHit->GetYPos())/((G4double)cHit->GetStepsContributing()));
+		  ((gHit->GetPos().y()/CLHEP::mm)-cHit->GetYPos())/((G4double)cHit->GetStepsContributing()));
     cHit->SetZPos(cHit->GetZPos() +
-		  (gHit->GetLocalPrePos().z()-cHit->GetZPos())/((G4double)cHit->GetStepsContributing()));
+		  ((gHit->GetPos().z()/CLHEP::mm)-cHit->GetZPos())/((G4double)cHit->GetStepsContributing()));
 
     //taking the shorter time of the geantHits
     if(gHit->GetToF()<cHit->GetTime()) cHit->SetTime(gHit->GetToF()/CLHEP::ns);
