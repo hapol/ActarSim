@@ -90,6 +90,17 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //ActarSimGasDetectorConstruction* gasDet = detConstruction->GetGasDetector();
   //G4double zGasBoxPosition=gasDet->GetGasBoxCenterZ();
 
+  // Printing the final settings...
+  G4cout << "##################################################################"
+    << G4endl
+    << "###########  ActarSimExogamDetectorConstruction::ConstructExogam() ####"
+    << G4endl
+    << " Detector material: "
+    << exogamBulkMaterial
+    << G4endl;
+  G4cout << "##################################################################"
+    << G4endl;
+
 
 // =====================================================================
 
@@ -428,37 +439,32 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
 #endif
 
-  // Germanium material definition
-  density = 5.323*CLHEP::g/CLHEP::cm3;
-  a = 72.59*CLHEP::g/CLHEP::mole;
-  G4Material* Germanium = new G4Material("Germanium", z=32., a, density);
-
 // Germanium Detector Component Number One ( "Ger1" )
    G4Trap* solidGer1 = new G4Trap("Ger1",pDzGer1,pThetaGer1,pPhiGer1,
                                          pDy1Ger1,pDx1Ger1,pDx2Ger1,pAlp1Ger1,
                                          pDy2Ger1,pDx3Ger1,pDx4Ger1,pAlp2Ger1);
-   G4LogicalVolume* logicGer1 = new G4LogicalVolume(solidGer1,Germanium,"Ger1");
+   G4LogicalVolume* logicGer1 = new G4LogicalVolume(solidGer1,exogamBulkMaterial,"Ger1");
    G4VPhysicalVolume* physiGer1 = new G4PVPlacement(G4Transform3D(rm11,
                      positionGer1),"Ger1",logicGer1,physiVac1,false,0);
 
 #ifdef REPLICAS
 
-   G4LogicalVolume* logicGer12 = new G4LogicalVolume(solidGer1,Germanium,"Ger1");
+   G4LogicalVolume* logicGer12 = new G4LogicalVolume(solidGer1,exogamBulkMaterial,"Ger1");
    G4VPhysicalVolume* physiGer12 = new G4PVPlacement(G4Transform3D(rm11,
                      positionGer1),"Ger1",logicGer12,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer22 = new G4LogicalVolume(solidGer1,Germanium,"Ger1");
+   G4LogicalVolume* logicGer22 = new G4LogicalVolume(solidGer1,exogamBulkMaterial,"Ger1");
    G4VPhysicalVolume* physiGer22 = new G4PVPlacement(G4Transform3D(rm11,
                      positionGer1),"Ger1",logicGer22,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer31 = new G4LogicalVolume(solidGer1,Germanium,"Ger1");
+   G4LogicalVolume* logicGer31 = new G4LogicalVolume(solidGer1,exogamBulkMaterial,"Ger1");
    G4VPhysicalVolume* physiGer31 = new G4PVPlacement(G4Transform3D(rm11,
                      positionGer1),"Ger1",logicGer31,physiVac4,false,3);
 
 #endif
 
 
-// Germanium Detector Component Number Two ( "Ger2" )
+// exogamBulkMaterial Detector Component Number Two ( "Ger2" )
 
    G4Tubs* solidG2 = new G4Tubs("G2",minRadiusGer2,maxRadiusGer2,
                           HalfLengthGer2,startPhiGer2,deltaPhiGer2);
@@ -469,7 +475,7 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
 
    G4SubtractionSolid* G2minusW2=new G4SubtractionSolid("Ger2",solidG2,solidWed2,0,positionWed2);
-   G4LogicalVolume* logicGer2 = new G4LogicalVolume(G2minusW2,Germanium,"Ger2");
+   G4LogicalVolume* logicGer2 = new G4LogicalVolume(G2minusW2,exogamBulkMaterial,"Ger2");
    G4VPhysicalVolume* physiGer2 = new G4PVPlacement(0,
                                    positionGer2,"Ger2",
                                    logicGer2,physiVac1,false,0);
@@ -478,22 +484,22 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 // REPLICAS
 //
-   G4LogicalVolume* logicGer13 = new G4LogicalVolume(G2minusW2,Germanium,"Ger2");
+   G4LogicalVolume* logicGer13 = new G4LogicalVolume(G2minusW2,exogamBulkMaterial,"Ger2");
    G4VPhysicalVolume* physiGer13 = new G4PVPlacement(0,positionGer2,"Ger2",
                                                logicGer13,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer23 = new G4LogicalVolume(G2minusW2,Germanium,"Ger2");
+   G4LogicalVolume* logicGer23 = new G4LogicalVolume(G2minusW2,exogamBulkMaterial,"Ger2");
    G4VPhysicalVolume* physiGer23 = new G4PVPlacement(0,positionGer2,"Ger2",
                                                logicGer23,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer32 = new G4LogicalVolume(G2minusW2,Germanium,"Ger2");
+   G4LogicalVolume* logicGer32 = new G4LogicalVolume(G2minusW2,exogamBulkMaterial,"Ger2");
    G4VPhysicalVolume* physiGer32 = new G4PVPlacement(0,positionGer2,"Ger2",
                                                logicGer32,physiVac4,false,3);
 
 #endif
 
 
-// Germanium Detector Component Number Three ( "Ger3" )
+// exogamBulkMaterial Detector Component Number Three ( "Ger3" )
 
    G4Tubs* solidG3 = new G4Tubs("G3",minRadiusGer3,maxRadiusGer3,
                           HalfLengthGer3,startPhiGer3,deltaPhiGer3);
@@ -505,7 +511,7 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
    G4SubtractionSolid* G3minusW3=new G4SubtractionSolid("Ger3-Wed3",solidG3,solidWed3,0,positionWed3);
    G4SubtractionSolid* G3minusW3b=new G4SubtractionSolid("Ger3",G3minusW3,solidWed3b,0,positionWed3b);
-   G4LogicalVolume* logicGer3 = new G4LogicalVolume(G3minusW3b,Germanium,"Ger3");
+   G4LogicalVolume* logicGer3 = new G4LogicalVolume(G3minusW3b,exogamBulkMaterial,"Ger3");
    G4VPhysicalVolume* physiGer3 = new G4PVPlacement(0,
                                    positionGer3,"Ger3",
                                    logicGer3,physiVac1,false,0);
@@ -514,22 +520,22 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
 //   // REPLICAS
 
-   G4LogicalVolume* logicGer14 = new G4LogicalVolume(G3minusW3b,Germanium,"Ger3");
+   G4LogicalVolume* logicGer14 = new G4LogicalVolume(G3minusW3b,exogamBulkMaterial,"Ger3");
    G4VPhysicalVolume* physiGer14 = new G4PVPlacement(0,positionGer3,"Ger3",
                                                logicGer14,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer24 = new G4LogicalVolume(G3minusW3b,Germanium,"Ger3");
+   G4LogicalVolume* logicGer24 = new G4LogicalVolume(G3minusW3b,exogamBulkMaterial,"Ger3");
    G4VPhysicalVolume* physiGer24 = new G4PVPlacement(0,positionGer3,"Ger3",
                                                logicGer24,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer25 = new G4LogicalVolume(G3minusW3b,Germanium,"Ger3");
+   G4LogicalVolume* logicGer25 = new G4LogicalVolume(G3minusW3b,exogamBulkMaterial,"Ger3");
    G4VPhysicalVolume* physiGer25 = new G4PVPlacement(0,positionGer3,"Ger3",
                                                logicGer25,physiVac4,false,3);
 
 #endif
 
 
-// Germanium Detector Component Number Two ( "Ger4" )
+// exogamBulkMaterial Detector Component Number Two ( "Ger4" )
 
    G4Tubs* solidG4 = new G4Tubs("G4",minRadiusGer4,maxRadiusGer4,
                           HalfLengthGer4,startPhiGer4,deltaPhiGer4);
@@ -539,7 +545,7 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
    G4Trd* solidWed4 = new G4Trd("Wed4",w4dy1,w4dy2,w4dx1,w4dx2,w4dz);
 
    G4SubtractionSolid* G4minusW4=new G4SubtractionSolid("Ger4",solidG4,solidWed4,0,positionWed4);
-   G4LogicalVolume* logicGer4 = new G4LogicalVolume(G4minusW4,Germanium,
+   G4LogicalVolume* logicGer4 = new G4LogicalVolume(G4minusW4,exogamBulkMaterial,
                                  "Ger4");
    G4VPhysicalVolume* physiGer4 = new G4PVPlacement(0,
                                    positionGer4,"Ger4",
@@ -549,27 +555,27 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 // REPLICAS
 
-   G4LogicalVolume* logicGer15 = new G4LogicalVolume(G4minusW4,Germanium,"Ger4");
+   G4LogicalVolume* logicGer15 = new G4LogicalVolume(G4minusW4,exogamBulkMaterial,"Ger4");
    G4VPhysicalVolume* physiGer15 = new G4PVPlacement(0,positionGer4,"Ger4",
                                                logicGer15,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer17 = new G4LogicalVolume(G4minusW4,Germanium,"Ger4");
+   G4LogicalVolume* logicGer17 = new G4LogicalVolume(G4minusW4,exogamBulkMaterial,"Ger4");
    G4VPhysicalVolume* physiGer17 = new G4PVPlacement(0,positionGer4,"Ger4",
                                                logicGer17,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer26 = new G4LogicalVolume(G4minusW4,Germanium,"Ger4");
+   G4LogicalVolume* logicGer26 = new G4LogicalVolume(G4minusW4,exogamBulkMaterial,"Ger4");
    G4VPhysicalVolume* physiGer26 = new G4PVPlacement(0,positionGer4,"Ger4",
                                                logicGer26,physiVac4,false,3);
 
 #endif
 
 
-// Germanium Detector Component Number Five ( "Ger5" )
+// exogamBulkMaterial Detector Component Number Five ( "Ger5" )
 
    G4Trap* solidGer5 = new G4Trap("Ger5",pDzGer5,pThetaGer5,pPhiGer5,
    pDy1Ger5,pDx1Ger5,pDx2Ger5,pAlp1Ger5,
                               pDy2Ger5,pDx3Ger5,pDx4Ger5,pAlp2Ger5);
-   G4LogicalVolume* logicGer5 = new G4LogicalVolume(solidGer5,Germanium,"Ger5");
+   G4LogicalVolume* logicGer5 = new G4LogicalVolume(solidGer5,exogamBulkMaterial,"Ger5");
    G4VPhysicalVolume* physiGer5 = new G4PVPlacement(G4Transform3D(rm51,
                                                   positionGer5),"Ger5",
                                                   logicGer5,physiVac1,false,0);
@@ -579,29 +585,29 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 //     REPLICAS
 //
-   G4LogicalVolume* logicGer16 = new G4LogicalVolume(solidGer5,Germanium,"Ger5");
+   G4LogicalVolume* logicGer16 = new G4LogicalVolume(solidGer5,exogamBulkMaterial,"Ger5");
    G4VPhysicalVolume* physiGer16 = new G4PVPlacement(G4Transform3D(rm51,
                                                   positionGer5),"Ger5",
                                                   logicGer16,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer18 = new G4LogicalVolume(solidGer5,Germanium,"Ger5");
+   G4LogicalVolume* logicGer18 = new G4LogicalVolume(solidGer5,exogamBulkMaterial,"Ger5");
    G4VPhysicalVolume* physiGer18 = new G4PVPlacement(G4Transform3D(rm51,
                                                   positionGer5),"Ger5",
                                                   logicGer18,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer27 = new G4LogicalVolume(solidGer5,Germanium,"Ger5");
+   G4LogicalVolume* logicGer27 = new G4LogicalVolume(solidGer5,exogamBulkMaterial,"Ger5");
    G4VPhysicalVolume* physiGer27 = new G4PVPlacement(G4Transform3D(rm51,
                                                   positionGer5),"Ger5",
                                                   logicGer27,physiVac4,false,3);
 
 #endif
 
-// Germanium Detector Component Number Six ( "Ger6" )
+// exogamBulkMaterial Detector Component Number Six ( "Ger6" )
 
    G4Trap* solidGer6 = new G4Trap("Ger6",pDzGer6,pThetaGer6,pPhiGer6,
    pDy1Ger6,pDx1Ger6,pDx2Ger6,pAlp1Ger6,
                               pDy2Ger6,pDx3Ger6,pDx4Ger6,pAlp2Ger6);
-   G4LogicalVolume* logicGer6 = new G4LogicalVolume(solidGer6,Germanium,"Ger6");
+   G4LogicalVolume* logicGer6 = new G4LogicalVolume(solidGer6,exogamBulkMaterial,"Ger6");
    G4VPhysicalVolume* physiGer6 = new G4PVPlacement(G4Transform3D(rm61,
                              positionGer6),"Ger6",logicGer6,physiVac1,false,0);
 
@@ -610,26 +616,26 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 // REPLICAS
 //
-   G4LogicalVolume* logicGer9 = new G4LogicalVolume(solidGer6,Germanium,"Ger6");
+   G4LogicalVolume* logicGer9 = new G4LogicalVolume(solidGer6,exogamBulkMaterial,"Ger6");
    G4VPhysicalVolume* physiGer9 = new G4PVPlacement(G4Transform3D(rm61,
                              positionGer6),"Ger6",logicGer9,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer19 = new G4LogicalVolume(solidGer6,Germanium,"Ger6");
+   G4LogicalVolume* logicGer19 = new G4LogicalVolume(solidGer6,exogamBulkMaterial,"Ger6");
    G4VPhysicalVolume* physiGer19 = new G4PVPlacement(G4Transform3D(rm61,
                              positionGer6),"Ger6",logicGer19,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer28 = new G4LogicalVolume(solidGer6,Germanium,"Ger6");
+   G4LogicalVolume* logicGer28 = new G4LogicalVolume(solidGer6,exogamBulkMaterial,"Ger6");
    G4VPhysicalVolume* physiGer28 = new G4PVPlacement(G4Transform3D(rm61,
                              positionGer6),"Ger6",logicGer28,physiVac4,false,3);
 
 #endif
 
 
-// Germanium Detector Component Number Seven ( "Ger7" )
+// exogamBulkMaterial Detector Component Number Seven ( "Ger7" )
 
    G4Tubs* solidGer7 = new G4Tubs("Ger7",minRadiusGer7,maxRadiusGer7,
                           HalfLengthGer7,startPhiGer7,deltaPhiGer7);
-   G4LogicalVolume* logicGer7 = new G4LogicalVolume(solidGer7,Germanium,"Ger7");
+   G4LogicalVolume* logicGer7 = new G4LogicalVolume(solidGer7,exogamBulkMaterial,"Ger7");
    G4VPhysicalVolume* physiGer7 = new G4PVPlacement(0,positionGer7,"Ger7",
                                            logicGer7, physiVac1,false,0);
 
@@ -638,27 +644,27 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 // REPLICAS
 //
-   G4LogicalVolume* logicGer10 = new G4LogicalVolume(solidGer7,Germanium,"Ger7");
+   G4LogicalVolume* logicGer10 = new G4LogicalVolume(solidGer7,exogamBulkMaterial,"Ger7");
    G4VPhysicalVolume* physiGer10 = new G4PVPlacement(0,positionGer7,"Ger7",
                                                logicGer10,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer20 = new G4LogicalVolume(solidGer7,Germanium,"Ger7");
+   G4LogicalVolume* logicGer20 = new G4LogicalVolume(solidGer7,exogamBulkMaterial,"Ger7");
    G4VPhysicalVolume* physiGer20 = new G4PVPlacement(0,positionGer7,"Ger7",
                                                logicGer20,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer29 = new G4LogicalVolume(solidGer7,Germanium,"Ger7");
+   G4LogicalVolume* logicGer29 = new G4LogicalVolume(solidGer7,exogamBulkMaterial,"Ger7");
    G4VPhysicalVolume* physiGer29 = new G4PVPlacement(0,positionGer7,"Ger7",
                                                logicGer29,physiVac4,false,3);
 
 #endif
 
-// Germanium Detector Component Number Eight ( "Ger8" )
+// exogamBulkMaterial Detector Component Number Eight ( "Ger8" )
 
    G4Trap* solidGer8 = new G4Trap("Ger8",pDzGer8,pThetaGer8,pPhiGer8,
    pDy1Ger8,pDx1Ger8,pDx2Ger8,pAlp1Ger8,
                               pDy2Ger8,pDx3Ger8,pDx4Ger8,pAlp2Ger8);
 
-   G4LogicalVolume* logicGer8 = new G4LogicalVolume(solidGer8,Germanium,"Ger8");
+   G4LogicalVolume* logicGer8 = new G4LogicalVolume(solidGer8,exogamBulkMaterial,"Ger8");
    G4VPhysicalVolume* physiGer8 = new G4PVPlacement(G4Transform3D(rm8,
                     positionGer8),"Ger8",logicGer8,physiVac1,false,0);
 
@@ -667,17 +673,17 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 //
 // REPLICAS
 //
-   G4LogicalVolume* logicGer11 = new G4LogicalVolume(solidGer8,Germanium,"Ger8");
+   G4LogicalVolume* logicGer11 = new G4LogicalVolume(solidGer8,exogamBulkMaterial,"Ger8");
    G4VPhysicalVolume* physiGer11 = new G4PVPlacement(G4Transform3D(rm8,
                                                  positionGer8),"Ger8",
                                                   logicGer11,physiVac2,false,1);
 
-   G4LogicalVolume* logicGer21 = new G4LogicalVolume(solidGer8,Germanium,"Ger8");
+   G4LogicalVolume* logicGer21 = new G4LogicalVolume(solidGer8,exogamBulkMaterial,"Ger8");
    G4VPhysicalVolume* physiGer21 = new G4PVPlacement(G4Transform3D(rm8,
                                                  positionGer8),"Ger8",
                                                   logicGer21,physiVac3,false,2);
 
-   G4LogicalVolume* logicGer30 = new G4LogicalVolume(solidGer8,Germanium,"Ger8");
+   G4LogicalVolume* logicGer30 = new G4LogicalVolume(solidGer8,exogamBulkMaterial,"Ger8");
    G4VPhysicalVolume* physiGer30 = new G4PVPlacement(G4Transform3D(rm8,
                                                  positionGer8),"Ger8",
                                                   logicGer30,physiVac4,false,3);

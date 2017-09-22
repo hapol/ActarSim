@@ -329,7 +329,7 @@ void ActarSimGasDetectorConstruction::SetGasMaterial (G4String mat) {
   //density	=(0.16642*293.15*kelvin*pressure)/(1.01325*bar*temperature)*mg/cm3;
   density	= (39.9481/Vm)*mg/cm3;
   G4Material* Ar =
-    new G4Material("Ar", z=2, a=39.9481*g/mole, density, kStateGas, temperature, pressure);
+    new G4Material("Ar", z=18, a=39.9481*g/mole, density, kStateGas, temperature, pressure);
 
   //CF4 (default  3.6586*mg/cm3 STP)
   //density	=(3.6586*293.15*kelvin*pressure)/(1.01325*bar*temperature)*mg/cm3;

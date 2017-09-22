@@ -1065,14 +1065,17 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     cosTheta_gamma = -1.0 + 2.0*G4UniformRand();
     sinTheta_gamma = sqrt(1 - cosTheta_gamma*cosTheta_gamma);
     //particleGun->SetParticleEnergy(0.2*MeV);
-    particleGun->SetParticleEnergy(2.2*MeV);
+    particleGun->SetParticleEnergy(1.0*MeV);
+    //particleGun->SetParticleEnergy(2.2*MeV);
     particleGun->SetParticleMomentumDirection(G4ThreeVector(sinTheta_gamma*cos(phi_gamma),
                                                             sinTheta_gamma*sin(phi_gamma),
                                                             cosTheta_gamma));
     particleGun->SetParticlePolarization(zero);
-    particleGun->SetParticlePosition(vertexPosition);
-  	particleGun->SetParticleTime(0.0);
-  	particleGun->GeneratePrimaryVertex(anEvent);
+    //particleGun->SetParticlePosition(vertexPosition);
+    G4double myZ = (-1.0 + 2.0*G4UniformRand())*133;
+    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,myZ));
+    particleGun->SetParticleTime(0.0);
+    particleGun->GeneratePrimaryVertex(anEvent);
   }
   // CASE F  Particle selected manually (using the messenger commands)
   else{
