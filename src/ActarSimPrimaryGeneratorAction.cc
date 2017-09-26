@@ -1056,7 +1056,52 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
              << " * ratio of compiting modes)"  << G4endl;
       G4cout << " *************************************************** "<< G4endl;
     }
+    Double_t Ene_ProtonSeparation_46Cr = 46.0235*MeV;
+    Double_t masa_proton = 923.0*MeV;
+    Double_t masa_45V = 923*45*MeV;
+    Double_t Eexc46Cr = 923*46*MeV;
+    Double_t energy45Vexcplusgamma = 923*45.1*MeV;
+    Double_t energyGamma = 1.322*MeV;
 
+//NOTA Supongo que la energía del gamma se saca directamente de la energy45Vexcplusgamma - la energia del estado fundamental //del 45V, así que si es ese el caso, puedes poner una variable mas energy45Vground y una ecuación:
+// energyGamma = energy45Vexcplusgamma - energy45Vground;
+
+    //Double_t energy_proton = (Eexc46Cr - energy45Vexcplusgamma - Ene_ProtonSeparation_46Cr) / (1+ masa_proton/masa_45V);
+    Double_t energy_proton = 0.8*MeV;
+    //G4cout << "CHECK: energy of the proton: " << energy_proton/MeV << " MeV"<< G4endl;
+
+    G4String particleName;
+    particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="proton"));
+    G4double cosTheta_proton;
+    G4double phi_proton = twopi*G4UniformRand();
+    G4double sinTheta_proton;
+    cosTheta_proton = -1.0 + 2.0*G4UniformRand();
+    sinTheta_proton = sqrt(1 - cosTheta_proton*cosTheta_proton);
+    particleGun->SetParticleEnergy(energy_proton);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(sinTheta_proton*cos(phi_proton),
+                                                            sinTheta_proton*sin(phi_proton),
+                                                            cosTheta_proton));
+    particleGun->SetParticlePolarization(zero);
+    particleGun->SetParticlePosition(vertexPosition);
+    particleGun->SetParticleTime(0.0);
+    particleGun->GeneratePrimaryVertex(anEvent);
+
+    particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="gamma"));
+    G4double cosTheta_gamma;
+    G4double phi_gamma = twopi*G4UniformRand();
+    G4double sinTheta_gamma;
+    cosTheta_gamma = -1.0 + 2.0*G4UniformRand();
+    sinTheta_gamma = sqrt(1 - cosTheta_gamma*cosTheta_gamma);
+    particleGun->SetParticleEnergy(energyGamma);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(sinTheta_gamma*cos(phi_gamma),
+                                                            sinTheta_gamma*sin(phi_gamma),
+                                                            cosTheta_gamma));
+    particleGun->SetParticlePolarization(zero);
+    particleGun->SetParticlePosition(vertexPosition);
+    particleGun->SetParticleTime(0.0);
+    particleGun->GeneratePrimaryVertex(anEvent);
+
+    /*
     G4String particleName;
     particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="gamma"));
     G4double cosTheta_gamma;
@@ -1071,11 +1116,10 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
                                                             sinTheta_gamma*sin(phi_gamma),
                                                             cosTheta_gamma));
     particleGun->SetParticlePolarization(zero);
-    //particleGun->SetParticlePosition(vertexPosition);
-    G4double myZ = (-1.0 + 2.0*G4UniformRand())*133;
-    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,myZ));
-    particleGun->SetParticleTime(0.0);
-    particleGun->GeneratePrimaryVertex(anEvent);
+    particleGun->SetParticlePosition(vertexPosition);
+  	particleGun->SetParticleTime(0.0);
+  	particleGun->GeneratePrimaryVertex(anEvent);
+    */
   }
   // CASE F  Particle selected manually (using the messenger commands)
   else{
