@@ -115,12 +115,17 @@ G4VPhysicalVolume* ActarSimGasDetectorConstruction::ConstructGas(G4LogicalVolume
 
     if(detConstruction->GetACTARTPCGeoIncludedFlag() == "on"){
       //gas Box size: (266*170*266)mm
-      gasBoxSizeX = 133.*mm;
-      gasBoxSizeY = 85.*mm;
-      gasBoxSizeZ = 133.*mm;
+      //gasBoxSizeX = 133.*mm;
+      //gasBoxSizeY = 85.*mm;
+      //gasBoxSizeZ = 133.*mm;
+      //gas Box size: (256*250*256)mm, P.C. Nov2017
+      gasBoxSizeX = 128.*mm;
+      gasBoxSizeY = 125.*mm;
+      gasBoxSizeZ = 128.*mm;
       //Pad Size : GasBox height from chamber floor = 4.54mm
       gasBoxCenterX = 0.*mm;
-      gasBoxCenterY = -105.0+gasBoxSizeY+4.54*mm; // gasBox shifted to be at the bottom of chamber and above the pads
+      //gasBoxCenterY = -105.0+gasBoxSizeY+4.54*mm; // gasBox shifted to be at the bottom of chamber and above the pads
+      gasBoxCenterY = -25.46*mm; // gasBox shifted to be at the bottom of chamber and above the pads
       gasBoxCenterZ = 0.*mm;
     }
     else if(detConstruction->GetACTARTPCDEMOGeoIncludedFlag() == "on"){

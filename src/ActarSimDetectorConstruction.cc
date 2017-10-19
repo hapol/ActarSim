@@ -52,8 +52,8 @@
 /// Constructor: initialize all variables, materials and pointers
 ActarSimDetectorConstruction::ActarSimDetectorConstruction()
   :   gasSD(0), silSD(0), silRingSD(0), sciSD(0),sciRingSD(0),plaSD(0), exogamSD(0),
-      solidWorld(0), worldLog(0), chamberLog(0), AlplateLog(0), DiamondLog(0), SupportLog(0),
-  worldPhys(0), chamberPhys(0), AlplatePhys(0), DiamondPhys(0), SupportPhys(0),
+      solidWorld(0), worldLog(0), chamberLog(0), innerChamberLog(0), AlplateLog(0), DiamondLog(0), SupportLog(0),
+  worldPhys(0), chamberPhys(0), innerChamberPhys(0), AlplatePhys(0), DiamondPhys(0), SupportPhys(0),
   mediumMaterial(0), defaultMaterial(0), chamberMaterial(0), windowMaterial(0),
   emField(0), MaikoGeoIncludedFlag("off"),
   ACTARTPCDEMOGeoIncludedFlag("off"), ACTARTPCGeoIncludedFlag("off"),
@@ -289,15 +289,15 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   //Scattering Chamber
   //--------------------------
   //Definition of the ACTAR-TPC detector
-  //Chamber half-lengths are (150, 105, 150)mm,
   //also selectable using /ActarSim/det/setXLengthGasChamber... in the macros
   //Last sentence is not true if chamberSizeX,Y,Z are reinitialized here - T.M. Feb 2016
-  //Increased chamber size to hold Exogam inside - P.C. Dec 2016
-  //chamberSizeX = 400.*mm;
-  chamberSizeX = 135.*mm;
-  chamberSizeY = 105.*mm;
-  //chamberSizeZ = 400.*mm;
-  chamberSizeZ = 135.*mm;
+  //Pablo Cabanelas, Nov 2017:
+  //Gas active volume dimension: 256mm x 250mm x 256mm
+  //Solid chamber dimension: 576mm x 310mm x 576mm
+  //Solid chamber walls: 2mm thick
+  chamberSizeX = 288.*mm; //half-lenght
+  chamberSizeY = 155.*mm; //half-lenght
+  chamberSizeZ = 288.*mm; //half-lenght
 
   //Chamber X,Y,Z Center
   chamberCenterX = 0.*m;
@@ -305,11 +305,11 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   chamberCenterZ = 0.*m;
 
   G4Box* solidChamber = new G4Box("Chamber",         //its name
-				  chamberSizeX,chamberSizeY,chamberSizeZ);   //its size
+				  chamberSizeX,chamberSizeY,chamberSizeZ);  //its size
 
   chamberLog = new G4LogicalVolume(solidChamber, //its solid
 						    chamberMaterial,
-						    "Chamber");            //its name
+						    "Chamber");             //its name
 
   chamberPhys = new G4PVPlacement(0,                     //no rotation
 						     G4ThreeVector(chamberCenterX,
@@ -323,11 +323,30 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
 
   if(chamberPhys){;}
 
+  //Inner non-active volume of the chamber 
+  G4Box* innerChamber = new G4Box("innerChamber",         //its name
+				  chamberSizeX-1,chamberSizeY-1,chamberSizeZ-1); //its size
+  innerChamberLog     = new G4LogicalVolume(innerChamber, //its solid
+						    gasDet->GetGasMaterial(),
+						    "innerChamber");             //its name
+  innerChamberPhys    = new G4PVPlacement(0,                     //no rotation
+						     G4ThreeVector(chamberCenterX,
+								   chamberCenterY,
+								   chamberCenterZ),
+						     innerChamberLog,            //its logical volume
+						     "innerChamber",             //its name
+						     chamberLog,                 //its mother  volume
+						     false,                      //no boolean operation
+						     0);
+  G4VisAttributes* innerVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
+  innerVisAtt->SetVisibility(true);
+  innerChamberLog->SetVisAttributes(innerVisAtt);
+
   //--------------------------
   // Gas volume
   //--------------------------
   if(gasGeoIncludedFlag=="on")
-    gasDet->Construct(chamberLog);
+    gasDet->Construct(innerChamberLog);
 
   //--------------------------
   //An Aluminium plate to see the Pads active area just below the gas volume
@@ -344,7 +363,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   G4double platePosZ = 0.*cm;
 
   AlplatePhys=new G4PVPlacement(0,G4ThreeVector( platePosX,platePosY,platePosZ),
-				AlplateLog,"Al_plate",chamberLog,false,0);
+				AlplateLog,"Al_plate",innerChamberLog,false,0);
 
   G4VisAttributes* plateVisAtt= new G4VisAttributes(G4Colour(1.0,0.,1.0));
   plateVisAtt->SetVisibility(true);
@@ -354,19 +373,19 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   // Sil volume
   //--------------------------
   if(silGeoIncludedFlag=="on")
-    silDet->Construct(chamberLog);
+    silDet->Construct(innerChamberLog);
 
   //--------------------------
   // Sci volume
   //--------------------------
   if(sciGeoIncludedFlag=="on")
-    sciDet->Construct(chamberLog);
+    sciDet->Construct(innerChamberLog);
 
   //--------------------------
   // Exogam volume
   //--------------------------
   if(exogamGeoIncludedFlag=="on")
-    exogamDet->Construct(chamberLog);
+    exogamDet->Construct(worldLog);
 
   //--------------------------
   // Histogramming
