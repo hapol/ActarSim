@@ -24,8 +24,6 @@ private:
 
   Double_t time;           ///< Pulse time (w.r.t. vertex emission)
   Double_t energy;         ///< Total energy deposited
-  Double_t eBeforeExogam;  ///< Energy before entering plastic
-  Double_t eAfterExogam;   ///< Energy left after plastic
 
   UInt_t eventID;          ///< Event ID
   UInt_t runID;            ///< Run ID
@@ -48,8 +46,6 @@ public:
 
   void SetTime(Double_t ti){time = ti;}
   void SetEnergy(Double_t ed){energy = ed;}
-  void SetEBeforeExogam(Double_t eb){eBeforeExogam = eb;}
-  void SetEAfterExogam(Double_t ea){eAfterExogam = ea;}
 
   void SetEventID(UInt_t ev){eventID = ev;}
   void SetRunID(UInt_t run){runID = run;}
@@ -69,8 +65,6 @@ public:
 
   Double_t GetEnergy(){return energy;}
   Double_t GetTime(){return time;}
-  Double_t GetEBeforeExogam(){return eBeforeExogam;}
-  Double_t GetEAfterExogam(){return eAfterExogam;}
 
   UInt_t GetEventID(){return eventID;}
   UInt_t GetRunID(){return runID;}

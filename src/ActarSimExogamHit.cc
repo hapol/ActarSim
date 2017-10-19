@@ -26,8 +26,6 @@ ActarSimExogamHit::ActarSimExogamHit(){
   zpos=0;
   time = 0.;
   energy = 0.;
-  eBeforeExogam = 0.;
-  eAfterExogam = 0.;
   eventID = 0;
   runID = 0;
   trackID=0;

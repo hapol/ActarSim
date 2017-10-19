@@ -52,7 +52,7 @@
 #include "G4PVParameterised.hh"
 
 // The exogam array parts definitions:
-//    #define PLAQALU
+#define PLAQALU
 #define REPLICAS_CLOVER
 #define REPLICAS
 
@@ -114,8 +114,8 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   G4double yHalfLengthAlu1 = 6.2*CLHEP::cm;
   G4double zHalfLengthAlu1 = 5.50*CLHEP::cm;  // 5.35*cm;
 
-  //G4double xHalfLengthPlAlu = 4.15*CLHEP::cm;
-  //G4double yHalfLengthPlAlu = 4.15*CLHEP::cm;
+  G4double xHalfLengthPlAlu = 4.15*CLHEP::cm;
+  G4double yHalfLengthPlAlu = 4.15*CLHEP::cm;
   G4double zHalfLengthPlAlu = (0.15/2)*CLHEP::cm;     // 1.5 mm thick
 
   G4double xHalfLengthVac1 = (2.725+0.3/5)*CLHEP::cm;
@@ -232,17 +232,16 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   //    Position Vectors
 
 //Alu1 = Clover #0
-  //G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+13.25*CLHEP::cm),0.*CLHEP::cm,-5.5*CLHEP::cm);
-  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+29.25*CLHEP::cm),0.*CLHEP::cm,-5.5*CLHEP::cm);
+  G4ThreeVector positionAlu1 = G4ThreeVector(-(zHalfLengthAlu1+32.25*CLHEP::cm),-0.2546*CLHEP::cm,-8.5*CLHEP::cm);
 
 #ifdef REPLICAS_CLOVER
-  G4ThreeVector positionAlu2 = G4ThreeVector(-(zHalfLengthAlu1+29.25*CLHEP::cm),0.*CLHEP::cm, 5.5*CLHEP::cm);
+  G4ThreeVector positionAlu2 = G4ThreeVector(-(zHalfLengthAlu1+32.25*CLHEP::cm),-0.2546*CLHEP::cm, 8.5*CLHEP::cm);
 
-  G4ThreeVector positionAlu3 = G4ThreeVector( (zHalfLengthAlu1+29.25*CLHEP::cm),0.*CLHEP::cm,-5.5*CLHEP::cm);
-  G4ThreeVector positionAlu4 = G4ThreeVector( (zHalfLengthAlu1+29.25*CLHEP::cm),0.*CLHEP::cm, 5.5*CLHEP::cm);
+  G4ThreeVector positionAlu3 = G4ThreeVector( (zHalfLengthAlu1+32.25*CLHEP::cm),-0.2546*CLHEP::cm,-8.5*CLHEP::cm);
+  G4ThreeVector positionAlu4 = G4ThreeVector( (zHalfLengthAlu1+32.25*CLHEP::cm),-0.2546*CLHEP::cm, 8.5*CLHEP::cm);
 
-  G4ThreeVector positionAlu5 = G4ThreeVector( -5.5*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+29.25*CLHEP::cm));
-  G4ThreeVector positionAlu6 = G4ThreeVector(  5.5*CLHEP::cm,0.*CLHEP::cm,(zHalfLengthAlu1+29.25*CLHEP::cm));
+  G4ThreeVector positionAlu5 = G4ThreeVector( -8.5*CLHEP::cm,-0.2546*CLHEP::cm,(zHalfLengthAlu1+32.25*CLHEP::cm));
+  G4ThreeVector positionAlu6 = G4ThreeVector(  8.5*CLHEP::cm,-0.2546*CLHEP::cm,(zHalfLengthAlu1+32.25*CLHEP::cm));
 #endif
 
 //PlAlu
@@ -315,14 +314,15 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   rmAlu1 = rmAlu1y*rmAlu1x;
 */
 
+  G4double rot = 0.1;
 
   G4RotationMatrix rmAlu1; // Alu1
-  rmAlu1.rotateY(M_PI*(-1./2.));
+  rmAlu1.rotateY(M_PI*((-1./2.)-rot));
 
 
 #ifdef REPLICAS_CLOVER
   G4RotationMatrix rmAlu3; // Alu3
-  rmAlu3.rotateY(M_PI*(1./2.));
+  rmAlu3.rotateY(M_PI*((1./2.)+rot));
 
   G4RotationMatrix rmAluZ2;
   rmAluZ2.rotateZ(M_PI*(1./2.));
@@ -334,13 +334,16 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   rmAluZ4.rotateZ(M_PI*(3./2.));
 
   G4RotationMatrix rmAlu2; // Alu2
-  rmAlu2 = rmAluZ2*rmAlu3 ;
+  rmAlu2.rotateY(M_PI*((-1./2.)+rot));
 
   G4RotationMatrix rmAlu4; // Alu4
-  rmAlu4.rotateZ(M_PI*(-1./2.));
+  rmAlu4.rotateY(M_PI*((1./2.)-rot));
 
   G4RotationMatrix rmAlu5; // Alu5
-  rmAlu5.rotateZ(M_PI*(-1./2.));
+  rmAlu5.rotateY(-M_PI*rot);
+
+  G4RotationMatrix rmAlu6; // Alu6
+  rmAlu6.rotateY(M_PI*rot);
 
 #endif
 
@@ -382,13 +385,13 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   G4VPhysicalVolume* physiAlu1 = new G4PVPlacement(G4Transform3D(rmAlu1,positionAlu1),logicAlu1,"Alu1",worldLog,false,0); //coupled to Alu2
 
 #ifdef REPLICAS_CLOVER
-   new G4PVPlacement(G4Transform3D(rmAlu1,positionAlu2),logicAlu1,"Alu2",worldLog,false,1); //coupled to Alu1
+   new G4PVPlacement(G4Transform3D(rmAlu2,positionAlu2),logicAlu1,"Alu2",worldLog,false,1); //coupled to Alu1
 
    new G4PVPlacement(G4Transform3D(rmAlu3,positionAlu3),logicAlu1,"Alu3",worldLog,false,2); //coupled to Alu4
-   new G4PVPlacement(G4Transform3D(rmAlu3,positionAlu4),logicAlu1,"Alu4",worldLog,false,3); //coupled to Alu3
+   new G4PVPlacement(G4Transform3D(rmAlu4,positionAlu4),logicAlu1,"Alu4",worldLog,false,3); //coupled to Alu3
 
    new G4PVPlacement(G4Transform3D(rmAlu5,positionAlu5),logicAlu1,"Alu5",worldLog,false,4); //coupled to Alu6
-   new G4PVPlacement(G4Transform3D(rmAlu5,positionAlu6),logicAlu1,"Alu6",worldLog,false,5); //coupled to Alu5
+   new G4PVPlacement(G4Transform3D(rmAlu6,positionAlu6),logicAlu1,"Alu6",worldLog,false,5); //coupled to Alu5
 #endif
 
 
@@ -428,14 +431,15 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
   G4Box* solidPlAlu = new G4Box("PlAlu",xHalfLengthPlAlu,yHalfLengthPlAlu,
                                                      zHalfLengthPlAlu);
 
-  G4LogicalVolume* logicPlAlu = new G4LogicalVolume(solidPlAlu,Aluminium,"PlAlu");
+  G4LogicalVolume* logicPlAlu = new G4LogicalVolume(solidPlAlu,G4Material::GetMaterial("Aluminium"),"PlAlu");
 
-  G4VPhysicalVolume* physiPlAlu = new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac1,false,0);
+  //G4VPhysicalVolume* physiPlAlu = new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac1,false,0);
+  new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac1,false,0);
 
 #ifdef REPLICAS
-  physiPlAlu = new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac2,false,1);
-  physiPlAlu = new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac3,false,2);
-  physiPlAlu = new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac4,false,3);
+  new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac2,false,1);
+  new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac3,false,2);
+  new  G4PVPlacement(0,positionPlAlu,"PlAlu",logicPlAlu,physiVac4,false,3);
 #endif
 
 #endif
@@ -693,10 +697,9 @@ G4VPhysicalVolume* ActarSimExogamDetectorConstruction::ConstructExogam(G4Logical
 
 // Visualization attributes
 
-  G4VisAttributes* AluVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,0.0));  // Yellow
+  G4VisAttributes* AluVisAtt= new G4VisAttributes(G4Colour(0.6,0.6,0.6));  // Grey 
   AluVisAtt ->SetForceWireframe(true);
-//logicAlu1 ->SetVisAttributes(AluVisAtt);
-  logicAlu1 ->SetVisAttributes(G4VisAttributes::Invisible);
+  logicAlu1 ->SetVisAttributes(AluVisAtt);
 
 
 #ifdef PLAQALU

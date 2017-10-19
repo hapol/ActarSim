@@ -325,14 +325,15 @@ void ActarSimROOTAnalExogam::AddCalCrystalHit(ActarSimExogamHit* cHit,
 					   G4int mode) {
 
   if(mode == 0) { //creation
-    //if( gHit->GetDetName() == "sciPhys" )   cHit->SetType(1);
-    //else G4cout << "ERROR in R3BROOTAnalCal::AddCalCrystalHit()." << G4endl
-    //            << "Unknown Detector Name: "<< gHit->GetDetName() << G4endl << G4endl;
 
-    //cHit->SetCopy(gHit->GetDetID());
+    G4int copy = 0;
 
     cHit->SetEnergy(gHit->GetEdep()/ CLHEP::MeV);
     cHit->SetTime(gHit->GetToF() / CLHEP::ns);
+
+    cHit->SetXPos(gHit->GetPos().x()/CLHEP::mm);
+    cHit->SetYPos(gHit->GetPos().y()/CLHEP::mm);
+    cHit->SetZPos(gHit->GetPos().z()/CLHEP::mm);
 
     cHit->SetEventID(GetTheEventID());
     cHit->SetRunID(GetTheRunID());
@@ -341,73 +342,29 @@ void ActarSimROOTAnalExogam::AddCalCrystalHit(ActarSimExogamHit* cHit,
     cHit->SetParticleCharge(gHit->GetParticleCharge());
     cHit->SetParticleMass(gHit->GetParticleMass());
 
-    //TODO-> Recover here the simhit/hit duality if needed!!
-    /*
-    if(((ActarSimROOTAnalysis*)gActarSimROOTAnalysis)->GetUseCrystalHitSim()!=0){
-      if( fabs(gHit->GetLocalPos().z())> 120 )
-	((ActarSimExogamHitSim*)cHit)->SetEnergyPerZone(24,gHit->GetEdep()/ MeV);
-      else {
-	G4int bin = (G4int)((gHit->GetLocalPos().z()/10) + 12);
-	((ActarSimExogamHitSim*)cHit)->SetEnergyPerZone( bin,
-							gHit->GetEdep()/ MeV);
-	//G4cout << G4endl << "Initial posZ:" << gHit->GetLocalPos().z() << "  bin " << bin
-	//       << " E:" <<  ((ActarSimExogamHitSim*)cHit)->GetEnergyPerZone( bin ) << G4endl << G4endl;
-      }
-      ((ActarSimExogamHitSim*)cHit)->SetNbOfSteps(1);
-      ((ActarSimExogamHitSim*)cHit)->SetTimeFirstStep(gHit->GetToF() / ns);
-      ((ActarSimExogamHitSim*)cHit)->SetTimeLastStep(gHit->GetToF() / ns);
-      ((ActarSimExogamHitSim*)cHit)->SetNbOfPrimaries(GetPrimNbOfParticles());
-      ((ActarSimExogamHitSim*)cHit)->SetEnergyPrimary(GetPrimEnergy() / MeV);
-      ((ActarSimExogamHitSim*)cHit)->SetThetaPrimary(GetPrimTheta() / rad);
-      ((ActarSimExogamHitSim*)cHit)->SetPhiPrimary(GetPrimPhi() / rad);
-      if(gHit->GetProcessName()=="phot") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(1);
-      else if(gHit->GetProcessName()=="compt") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(2);
-      else if(gHit->GetProcessName()=="conv") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(3);
-      else if(gHit->GetProcessName()=="msc") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(4);
-      else if(gHit->GetProcessName()=="eBrem") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(5);
-      else if(gHit->GetProcessName()=="Transportation") ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(6);
-      else ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionType(0);
-      ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionX(gHit->GetLocalPos().x());
-      ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionY(gHit->GetLocalPos().y());
-      ((ActarSimExogamHitSim*)cHit)->SetFirstInteractionZ(gHit->GetLocalPos().z());
-    }
-    */
-  }
-  else if(mode==1){ //addition
+    cHit->SetStepsContributing(1);
+
+    if(cHit->GetXPos()<0 && cHit->GetZPos()<0)                                  copy=0;
+    if(cHit->GetXPos()<0 && cHit->GetZPos()>0 && cHit->GetZPos()<20.*CLHEP::cm) copy=1;
+    if(cHit->GetXPos()<0 && cHit->GetZPos()>20.*CLHEP::cm)                      copy=2;
+    if(cHit->GetXPos()>0 && cHit->GetZPos()>20.*CLHEP::cm)                      copy=3;
+    if(cHit->GetXPos()>0 && cHit->GetZPos()>0 && cHit->GetZPos()<20.*CLHEP::cm) copy=4;
+    if(cHit->GetXPos()>0 && cHit->GetZPos()<0)                                  copy=5;
+    cHit->SetDetectorID(gHit->GetDetID() + 4*copy);
+
+  } else if(mode==1){ //addition
+
     cHit->SetEnergy(cHit->GetEnergy() + gHit->GetEdep()/ CLHEP::MeV);
     if(gHit->GetToF()<cHit->GetTime()) cHit->SetTime(gHit->GetToF()/ CLHEP::ns);
 
-    //TODO-> Recover here the simhit/hit duality if needed!!
-    /*
-    if(((ActarSimROOTAnalysis*)gActarSimROOTAnalysis)->GetUseCrystalHitSim()!=0){
-      if( fabs(gHit->GetLocalPos().z())> 120 )
-	((R3BCalCrystalHitSim*)cHit)->SetEnergyPerZone(24,
-						       ((R3BCalCrystalHitSim*)cHit)->GetEnergyPerZone(24)+gHit->GetEdep()/ MeV);
-      else {
-	G4int bin = (G4int)((gHit->GetLocalPos().z()/10) + 12);
-	((R3BCalCrystalHitSim*)cHit)->SetEnergyPerZone( bin,
-							((R3BCalCrystalHitSim*)cHit)->GetEnergyPerZone(bin)+gHit->GetEdep()/ MeV);
-	//G4cout << G4endl << "Adding posZ:" << gHit->GetLocalPos().z() << "  bin " << bin << " E:"
-	//       << ((R3BCalCrystalHitSim*)cHit)->GetEnergyPerZone( bin ) << G4endl << G4endl;
-      }
-      ((R3BCalCrystalHitSim*)cHit)->SetNbOfSteps(((R3BCalCrystalHitSim*)cHit)->GetNbOfSteps()+1);
-      if(gHit->GetToF()<((R3BCalCrystalHitSim*)cHit)->GetTime()){
-	((R3BCalCrystalHitSim*)cHit)->SetTime(gHit->GetToF()/ ns);
-	((R3BCalCrystalHitSim*)cHit)->SetTimeFirstStep(gHit->GetToF() / ns);
-	if(gHit->GetProcessName()=="phot") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(1);
-	else if(gHit->GetProcessName()=="compt") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(2);
-	else if(gHit->GetProcessName()=="conv") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(3);
-	else if(gHit->GetProcessName()=="msc") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(4);
-	else if(gHit->GetProcessName()=="eBrem") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(5);
-	else if(gHit->GetProcessName()=="Transportation") ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(6);
-	else ((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionType(0);
-	((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionX(gHit->GetLocalPos().x());
-	((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionY(gHit->GetLocalPos().y());
-	((R3BCalCrystalHitSim*)cHit)->SetFirstInteractionZ(gHit->GetLocalPos().z());
-      }
-      else if(gHit->GetToF()>((R3BCalCrystalHitSim*)cHit)->GetTimeLastStep())
-	((R3BCalCrystalHitSim*)cHit)->SetTimeLastStep(gHit->GetToF());
-    }
-    */
+    cHit->SetStepsContributing(cHit->GetStepsContributing()+1);
+
+    cHit->SetXPos(cHit->GetXPos() +
+        ((gHit->GetPos().x()/CLHEP::mm)-cHit->GetXPos())/((G4double)cHit->GetStepsContributing()));
+    cHit->SetYPos(cHit->GetYPos() +
+        ((gHit->GetPos().y()/CLHEP::mm)-cHit->GetYPos())/((G4double)cHit->GetStepsContributing()));
+    cHit->SetZPos(cHit->GetZPos() +
+        ((gHit->GetPos().z()/CLHEP::mm)-cHit->GetZPos())/((G4double)cHit->GetStepsContributing()));
+
   }
 }
