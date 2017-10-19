@@ -45,8 +45,8 @@ using namespace std;
 //////////////////////////////////////////////////////////////////
 /// Constructor: init values are filled
 ActarSimPrimaryGeneratorAction::ActarSimPrimaryGeneratorAction()
-  :gasDetector(0), incidentIon(0),targetIon(0),scatteredIon(0),recoilIon(0),
-   beamInteractionFlag("off"),
+  :gasDetector(0), incidentIon(0),targetIon(0),scatteredIon(0),recoilIon(0), vertexZPosition(1000000),
+   beamInteractionFlag("off"),implantBeamFlag("off"),
    realisticBeamFlag("off"), reactionFromEvGenFlag("off"), reactionFromCrossSectionFlag("off"),
    reactionFromFileFlag("off"),reactionFromCineFlag("off"),
    randomThetaFlag("off"),reactionFile("He8onC12_100MeV_Elastic.dat"),reactionFromKineFlag("off"),
@@ -192,10 +192,11 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     if(gActarSimROOTAnalysis){
       pBeamInfo = gActarSimROOTAnalysis->GetBeamInfo();
       gActarSimROOTAnalysis->SetBeamInteractionFlag("on");
+      if(implantBeamFlag == "on")gActarSimROOTAnalysis->SetImplantBeamFlag("on");
     }
 
     if(pBeamInfo->GetStatus() > 1){
-      // Beam reached vertex: Tracking vertex products (later in this code)
+      // Beam reached vertex or implanted: Tracking vertex products (later in this code)
       // Resetting the BeamInfo status to 0, for the next beam tracking
       if(verboseLevel>0){
         G4cout << G4endl
@@ -254,7 +255,7 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       pBeamInfo->SetMass(incidentIon->GetPDGMass());
 
       // vertex_z0 decides the z position of the vertex. The beam is tracked till z0 is reached ...
-      G4double vertex_z0 = 0;
+      G4double vertex_z0 = 1000000; //far, to ensure that never happens by default
 
       if(randomVertexZPositionFlag=="off"){
         vertex_z0 = vertexZPosition;
@@ -268,8 +269,8 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       // approximation is suitable (non-resonant beam)
 
       pBeamInfo->SetNextZVertex(vertex_z0);
-      pBeamInfo->SetEnergyEntrance(GetIncidentEnergy()); //no need of nextEnergyEntrance, as all entry energies are the same. If this is not true in future, an additional datamember for beamInfo will be needed
 
+      G4double beamEnergy = GetIncidentEnergy();        
       if(realisticBeamFlag == "on") {
         // Emittance is defined in mm mrad
         // The polar angle at Entrance is defined by the relation between emitance and radiusAtEntrance.
@@ -280,7 +281,39 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
         G4double thetaAtEntrance = thetaWidth * G4UniformRand() * mrad;
         G4double phiAtEntrance = G4UniformRand() * twopi; //angle phi of momentum
         G4double phi2AtEntrance = G4UniformRand() * twopi; //angle for defining the entrance point
-
+	if(energyDispersionType==0){ 
+	  //flat dispersion within [incidentEnergy-incidentEnergy*energyDispersion/100,incidentEnergy+incidentEnergy*energyDispersion/100]
+	  beamEnergy = GetIncidentEnergy() * ( 1 + energyDispersion/100 * ( 2*G4UniformRand() - 1));
+	  G4cout << G4endl
+		 << " *************************************************** " << G4endl
+		 << " * ActarSimPrimaryGeneratorAction::GeneratePrimaries() " << G4endl
+		 << " * energyDispersionType = " << energyDispersionType << " in the configuration file" << G4endl
+		 << " * energy "<< beamEnergy << " " << G4endl;
+	  G4cout << " *************************************************** "<< G4endl;
+	}
+	else if(energyDispersionType==1){ 
+	  //gaussian dispersion with sigma = (energyDispersion/100)*incidentEnergy
+	  beamEnergy = G4RandGauss::shoot(GetIncidentEnergy(),GetIncidentEnergy()*(energyDispersion/100));
+	  if(verboseLevel>1){
+	    G4cout << G4endl
+		   << " *************************************************** " << G4endl
+		   << " * ActarSimPrimaryGeneratorAction::GeneratePrimaries() " << G4endl
+		   << " * energyDispersionType = " << energyDispersionType << " in the configuration file" << G4endl
+		   << " * energy "<< beamEnergy << " " << G4endl;	  
+	    G4cout << " *************************************************** "<< G4endl;
+	  }
+	}
+	else{
+	  if(verboseLevel>1){
+	    G4cout << G4endl
+		   << " *************************************************** " << G4endl
+		   << " * ActarSimPrimaryGeneratorAction::GeneratePrimaries() " << G4endl
+		   << " * energyDispersionType = " << energyDispersionType << " in the configuration file" << G4endl
+		   << " * does not correspond with a valid dispersion type. " << G4endl;
+	    G4cout << " *************************************************** "<< G4endl;
+	  }
+	}
+	
         G4ThreeVector directionAtEntrance = G4ThreeVector(sin(thetaAtEntrance)*cos(phiAtEntrance),
 							  sin(thetaAtEntrance)*sin(phiAtEntrance),
 							  cos(thetaAtEntrance));
@@ -311,14 +344,16 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 	pBeamInfo->SetPositionEntrance(beamPosition.x(),beamPosition.y(),beamPosition.z());
 	pBeamInfo->SetAnglesEntrance(0.,0.);
       }
+      pBeamInfo->SetEnergyEntrance(beamEnergy);
+
       particleGun->SetParticleTime(0.0);
       particleGun->SetParticlePolarization(zero);
-      particleGun->SetParticleEnergy(GetIncidentEnergy());
+      particleGun->SetParticleEnergy(beamEnergy);
       particleGun->GeneratePrimaryVertex(anEvent);
 
-      //Histogramming
-      if(gActarSimROOTAnalysis)
-        gActarSimROOTAnalysis->GenerateBeam(anEvent);
+      //Histogramming NOT ANYMORE HERE; IT WAS PRODUCING A DELAY (EVENT 0 was 2 in output)
+      //if(gActarSimROOTAnalysis)
+      //gActarSimROOTAnalysis->GenerateBeam(anEvent);
 
       return;  //end of the function after generating the beam...
                //waiting for next event for the reaction products.
@@ -1056,14 +1091,15 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
              << " * ratio of compiting modes)"  << G4endl;
       G4cout << " *************************************************** "<< G4endl;
     }
-    Double_t Ene_ProtonSeparation_46Cr = 46.0235*MeV;
-    Double_t masa_proton = 923.0*MeV;
-    Double_t masa_45V = 923*45*MeV;
-    Double_t Eexc46Cr = 923*46*MeV;
-    Double_t energy45Vexcplusgamma = 923*45.1*MeV;
+    //Double_t Ene_ProtonSeparation_46Cr = 46.0235*MeV;
+    //Double_t masa_proton = 923.0*MeV;
+    //Double_t masa_45V = 923*45*MeV;
+    //Double_t Eexc46Cr = 923*46*MeV;
+    //Double_t energy45Vexcplusgamma = 923*45.1*MeV;
     Double_t energyGamma = 1.322*MeV;
 
-//NOTA Supongo que la energía del gamma se saca directamente de la energy45Vexcplusgamma - la energia del estado fundamental //del 45V, así que si es ese el caso, puedes poner una variable mas energy45Vground y una ecuación:
+//NOTA Supongo que la energía del gamma se saca directamente de la energy45Vexcplusgamma - la energia del estado fundamental 
+//del 45V, así que si es ese el caso, puedes poner una variable mas energy45Vground y una ecuación:
 // energyGamma = energy45Vexcplusgamma - energy45Vground;
 
     //Double_t energy_proton = (Eexc46Cr - energy45Vexcplusgamma - Ene_ProtonSeparation_46Cr) / (1+ masa_proton/masa_45V);
@@ -1178,7 +1214,7 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       particleGun->SetParticleEnergy(alpha_energy[i]*MeV);
     }
     else{
-      particleGun->SetParticleEnergy(GetIncidentEnergy());
+      particleGun->SetParticleEnergy(GetIncidentEnergy());//TODO! Check if is needed to introduce energyDispersion here
     }
 
     //Piotr: for the p/alpha discrimination test
@@ -1207,6 +1243,6 @@ void ActarSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   if(gActarSimROOTAnalysis){
     pBeamInfo = gActarSimROOTAnalysis->GetBeamInfo();
     //Histogramming
-    gActarSimROOTAnalysis->GeneratePrimaries(anEvent,pBeamInfo);
+    //gActarSimROOTAnalysis->GeneratePrimaries(anEvent,pBeamInfo);
   }
 }

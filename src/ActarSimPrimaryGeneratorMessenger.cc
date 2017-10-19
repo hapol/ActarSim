@@ -37,7 +37,9 @@
 /// - /ActarSim/gun/particle
 /// - /ActarSim/gun/realisticBeam
 /// - /ActarSim/gun/beamInteraction
+/// - /ActarSim/gun/implantBeam
 /// - /ActarSim/gun/emittance
+/// - /ActarSim/gun/energyDispersion
 /// - /ActarSim/gun/beamDirection
 /// - /ActarSim/gun/beamTheta
 /// - /ActarSim/gun/beamPhi
@@ -119,7 +121,7 @@ ActarSimPrimaryGeneratorMessenger::ActarSimPrimaryGeneratorMessenger(ActarSimPri
   particleCmd->SetCandidates(candidateList);
 
   realisticBeamCmd = new G4UIcmdWithAString("/ActarSim/gun/realisticBeam",this);
-  realisticBeamCmd->SetGuidance("Simulates beam emittance according to emittance parameters.");
+  realisticBeamCmd->SetGuidance("Simulates beam emittance and dispersion according to emittance parameters.");
   realisticBeamCmd->SetGuidance("  Choice : on, off(default)");
   realisticBeamCmd->SetParameterName("choice",true);
   realisticBeamCmd->SetDefaultValue("off");
@@ -134,12 +136,34 @@ ActarSimPrimaryGeneratorMessenger::ActarSimPrimaryGeneratorMessenger(ActarSimPri
   beamInteractionCmd->SetCandidates("on off");
   beamInteractionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  implantBeamCmd = new G4UIcmdWithAString("/ActarSim/gun/implantBeam",this);
+  implantBeamCmd->SetGuidance("Waits till the beam implantation before the second part of the reaction.");
+  implantBeamCmd->SetGuidance("  Choice : on, off(default)");
+  implantBeamCmd->SetParameterName("choice",true);
+  implantBeamCmd->SetDefaultValue("off");
+  implantBeamCmd->SetCandidates("on off");
+  implantBeamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   emittanceCmd = new G4UIcmdWithADouble("/ActarSim/gun/emittance",this);
   emittanceCmd->SetGuidance("Selects the value of the emittance [in mm mrad].");
   emittanceCmd->SetGuidance(" Default value is 1 mm mrad. ");
   emittanceCmd->SetParameterName("emittance",false);
   emittanceCmd->SetDefaultValue(1.);
   emittanceCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  energyDispersionCmd = new G4UIcmdWith3VectorAndUnit("/ActarSim/gun/energyDispersion",this);
+  energyDispersionCmd->SetGuidance("Selects the type and type of the energy dispersion.");
+  energyDispersionCmd->SetGuidance("Possible values for eneDispType are 0: flat or 1: gauss.");
+  energyDispersionCmd->SetGuidance("For flat, eneDispValue is the % around the incident energy.");
+  energyDispersionCmd->SetGuidance("  energy = originalEnergy * ( 1 + eneDispValue/100 * ( 2*G4UniformRand() - 1))");
+  energyDispersionCmd->SetGuidance("For gauss, eneDispValue is the sigma of the gauss.");
+  energyDispersionCmd->SetGuidance("  energy = G4RandGauss::shoot(originalEnergy,originalEnergy*(eneDispValue/100)");
+  energyDispersionCmd->SetGuidance(" Default values are 0 0 0");
+  energyDispersionCmd->SetParameterName("eneDispType","eneDispValue","notDefined",true);
+  energyDispersionCmd->SetDefaultValue(G4ThreeVector(0,0,0));
+  energyDispersionCmd->SetUnitCategory("Energy");
+  energyDispersionCmd->SetDefaultUnit("MeV");
+  energyDispersionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   beamDirectionCmd = new G4UIcmdWith3Vector("/ActarSim/gun/beamDirection",this);
   beamDirectionCmd->SetGuidance("Set beam momentum direction.");
@@ -645,7 +669,7 @@ ActarSimPrimaryGeneratorMessenger::ActarSimPrimaryGeneratorMessenger(ActarSimPri
   vertexZPositionCmd->SetParameterName("Z0",true,true);
   vertexZPositionCmd->SetDefaultUnit("mm");
   vertexZPositionCmd->SetUnitCategory("Length");
-  vertexZPositionCmd->SetDefaultValue(0.0);
+  vertexZPositionCmd->SetDefaultValue(1000000.0); //far, to ensure that never happens by default
   vertexZPositionCmd->SetUnitCandidates("mm cm m");
 
   polCmd = new G4UIcmdWith3Vector("/ActarSim/gun/polarization",this);
@@ -701,7 +725,9 @@ ActarSimPrimaryGeneratorMessenger::~ActarSimPrimaryGeneratorMessenger() {
   delete ionCmd;
   delete realisticBeamCmd;
   delete beamInteractionCmd;
+  delete implantBeamCmd;
   delete emittanceCmd;
+  delete energyDispersionCmd;
   delete beamDirectionCmd;
   delete beamPositionCmd;
   delete beamRadiusAtEntranceCmd;
@@ -765,8 +791,17 @@ void ActarSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   if( command == beamInteractionCmd )
     actarSimActionGun->SetBeamInteractionFlag(newValues);
 
+   if( command == implantBeamCmd )
+    actarSimActionGun->SetImplantBeamFlag(newValues);
+
   if( command == emittanceCmd)
     actarSimActionGun->SetEmittance(emittanceCmd->GetNewDoubleValue(newValues));
+
+  if( command == energyDispersionCmd){
+    G4ThreeVector values = energyDispersionCmd->GetNew3VectorValue(newValues);
+    actarSimActionGun->SetEnergyDispersionType(values.getX());
+    actarSimActionGun->SetEnergyDispersion(values.getY());
+  }
 
   if( command==beamDirectionCmd )
     actarSimActionGun->SetBeamMomentumDirection(beamDirectionCmd->GetNew3VectorValue(newValues));
@@ -915,7 +950,8 @@ void ActarSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     G4double incidentEnergyTmp;
     incidentEnergyTmp=KineLabEnergyCmd->GetNewDoubleValue(newValues);
     actarSimActionGun->SetLabEnergy(incidentEnergyTmp);
-    actarSimActionGun->SetIncidentEnergy(incidentEnergyTmp);//Piotr: why do we have incident energy and lab energy?
+    actarSimActionGun->SetIncidentEnergy(incidentEnergyTmp);
+    //incident is for beam, Lab for reaction or for beam if beamInteraction is selected
   }
 
   if( command == KineUserThetaCMCmd )
@@ -946,7 +982,8 @@ void ActarSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
       SetThetaLabAngle(thetaLabAngleCmd->GetNewDoubleValue(newValues));
 
   if( command == energyCmd ){
-    actarSimActionGun->SetParticleEnergy(energyCmd->GetNewDoubleValue(newValues));//Piotr: Doesn't set the energy when modify
+    actarSimActionGun->SetParticleEnergy(energyCmd->GetNewDoubleValue(newValues));
+    //Piotr: Doesn't set the energy when modify
     actarSimActionGun->SetIncidentEnergy(energyCmd->GetNewDoubleValue(newValues));
   }
 

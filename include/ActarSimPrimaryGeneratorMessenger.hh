@@ -36,9 +36,10 @@ private:
   G4UIdirectory*               CineDir;                ///< Directory for CINE commands
   G4UIcmdWithoutParameter*     listCmd;                ///< List available particles.
   G4UIcmdWithAString*          particleCmd;            ///< Select the incident particle.
-  G4UIcmdWithAString*          realisticBeamCmd;       ///< Simulates beam emittance according to emittance parameters.
+  G4UIcmdWithAString*          realisticBeamCmd;       ///< Simulates beam emittance according to emittance parameters and incoming beam energy spread.
   G4UIcmdWithAString*          beamInteractionCmd;     ///< Simulates the beam energy loss in gas.
-  G4UIcmdWithAString*          reactionFromFileCmd;    ///< Select a reaction from an input file
+  G4UIcmdWithAString*          implantBeamCmd;         ///< Simulates the beam implantation before the reaction.
+  G4UIcmdWithAString*          reactionFromFileCmd;    ///< Select a reaction from an input file.
   G4UIcmdWithAString*          reactionFromCrossSectionCmd; ///< DO NOT USE. Simulates beam/target from the cross-sections. DO NOT USE.
   G4UIcmdWithAString*          gammaGenTestCmd;   ///TEST: Simulates gamma (+proton) emission after stopping a beam in the gas.
   G4UIcmdWithAString*          reactionFromEvGenCmd;   ///< DO NOT USE. Simulates beam/target from event generator. DO NOT USE.
@@ -64,6 +65,7 @@ private:
   G4UIcmdWithAnInteger*        numberCmd;              ///< Set number of particles to be generated in a single event
 
   G4UIcmdWithADouble*          emittanceCmd;           ///< Selects the value of the emittance [in mm mrad].
+  G4UIcmdWith3VectorAndUnit*   energyDispersionCmd;    ///< Selects the value and type of the energy dispersion.
   G4UIcmdWith3Vector*          beamDirectionCmd;       ///< Set beam momentum direction.
   G4UIcmdWith3VectorAndUnit*   beamPositionCmd;        ///< Set beam starting position.
   G4UIcmdWithADoubleAndUnit*   beamRadiusAtEntranceCmd; ///< Selects the beam radius at entrance of ACTAR.

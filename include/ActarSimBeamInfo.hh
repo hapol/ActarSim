@@ -32,7 +32,8 @@ private:
   Double_t yVertex;            ///< Y beam at reaction vertex position
   Double_t zVertex;            ///< Z beam at reaction vertex position
 
-  Double_t nextZVertex;        ///< Z beam for next reaction
+  /// Z beam for next reaction. Not included in the streamer
+  Double_t nextZVertex;        //!
 
   Double_t timeVertex;         ///< Time at reaction vertex postion
 

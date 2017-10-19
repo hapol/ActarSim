@@ -122,7 +122,7 @@ ActarSimROOTAnalysis::ActarSimROOTAnalysis():
 }
 
 //////////////////////////////////////////////////////////////////
-/// Constructor. Save and close Files.
+/// Destructor. Save and close Files.
 ActarSimROOTAnalysis::~ActarSimROOTAnalysis() {
   delete analMessenger;
 
@@ -132,7 +132,7 @@ ActarSimROOTAnalysis::~ActarSimROOTAnalysis() {
   if (gActarSimROOTAnalysis == this)
     gActarSimROOTAnalysis = (ActarSimROOTAnalysis *)0;
 
-  delete theData;
+  //delete theData;
 
   if (gSystem) gSystem->ProcessEvents();
 }
@@ -151,10 +151,10 @@ void ActarSimROOTAnalysis::InitAnalysisForExistingDetectors() {
     eventTree = new TTree("The_ACTAR_Event_Tree","Event_Tree");
     tracksTree = new TTree("The_ACTAR_Tracks_Tree","Tracks_Tree");
 
-    primaryInfoCA = new TClonesArray("ActarSimPrimaryInfo",2);
-    eventTree->Branch("primaryInfo",&primaryInfoCA);
     beamInfoCA = new TClonesArray("ActarSimBeamInfo",1);
     eventTree->Branch("beamInfo",&beamInfoCA);
+    primaryInfoCA = new TClonesArray("ActarSimPrimaryInfo",2);
+    eventTree->Branch("primaryInfo",&primaryInfoCA);
     theDataCA = new TClonesArray("ActarSimData",1);
     eventTree->Branch("theData",&theDataCA);
   }
@@ -221,12 +221,11 @@ void ActarSimROOTAnalysis::SetCuts() {
 
 //////////////////////////////////////////////////////////////////
 /// Defining any beam related histogram or information in the output file
-void ActarSimROOTAnalysis::GenerateBeam(const G4Event *anEvent){
-  SetTheEventID(anEvent->GetEventID());
-
-  //Clear the ClonesArray before filling it
+void ActarSimROOTAnalysis::GenerateBeam(){
+  //Set eventID and runID
   pBeamInfo->SetEventID(theEventID);
   pBeamInfo->SetRunID(theRunID);
+
   //There is only one clone of beamInfo..
   new((*beamInfoCA)[0])ActarSimBeamInfo(*pBeamInfo);
   //do not delete pBeamInfo, as the same pointer is used for all events
@@ -243,7 +242,7 @@ void ActarSimROOTAnalysis::GeneratePrimaries(const G4Event *anEvent,
 					     G4double Energy2) {
   //DEPRECATED!!!!! DO NOT USE
   if (gSystem) gSystem->ProcessEvents();
-  SetTheEventID(anEvent->GetEventID());
+  //SetTheEventID(anEvent->GetEventID());
 
   //TODO->Remove this assymetry!!! There should be only one GeneratePrimaries
   //and all information should come in objects, nor arguments!!!!
@@ -312,11 +311,11 @@ void ActarSimROOTAnalysis::GeneratePrimaries(const G4Event *anEvent,
 }
 
 //////////////////////////////////////////////////////////////////
-/// Actions to perform in the analysis during the cut setting
+/// Defining any reaction related histogram or information in the output file
 void ActarSimROOTAnalysis::GeneratePrimaries(const G4Event *anEvent, ActarSimBeamInfo *beamInfo) {
 
   if (gSystem) gSystem->ProcessEvents();
-  SetTheEventID(anEvent->GetEventID());
+  //SetTheEventID(anEvent->GetEventID());
 
   Double_t aTheta1 = beamInfo->GetThetaEntrance() / CLHEP::deg;   // in [deg]
   Double_t aTheta2 = beamInfo->GetThetaVertex() / CLHEP::deg;   // in [deg]
@@ -535,6 +534,9 @@ void ActarSimROOTAnalysis::BeginOfEventAction(const G4Event *anEvent){
 void ActarSimROOTAnalysis::EndOfEventAction(const G4Event *anEvent) {
   if (gSystem) gSystem->ProcessEvents();
 
+  //Moving the filling of the information to the end of the event...
+  if(pBeamInfo->GetStatus()==0) GeneratePrimaries(anEvent,pBeamInfo);
+
   G4PrimaryVertex* myPVertex1 = anEvent->GetPrimaryVertex(0);
   G4PrimaryVertex* myPVertex2 = 0;
   if(anEvent->GetNumberOfPrimaryVertex()>1)
@@ -665,21 +667,52 @@ void ActarSimROOTAnalysis::UserSteppingAction(const G4Step *aStep){
   // If a beam ion is being tracked with status 1 (ion beam being tracked) and if the present
   // step corresponds to the primary (the ion itself!), checks if the z position of vertex,
   // [calculated in ActarSimPrimaryGeneratorAction and stored in the ActarSimBeamInfo]
-  // is reached. If so, store the ion position and use it for vertex generation and abort the event.
+  // is reached. If so, store the ion position and use it for vertex generation and abort
+  // the event. Additionally, if implantBeamFlag is set, the implantation of the beam
+  // is ensured by checking when kinetic energy is zero and aborting the event at that moment
 
   if(beamInteractionFlag=="on" && pBeamInfo->GetStatus() == 1){
-    G4double zVertex = pBeamInfo->GetNextZVertex();
     if(aStep->GetTrack()->GetParentID()==0){
+      const G4int verboseLevel = G4RunManager::GetRunManager()->GetVerboseLevel();
+      if(implantBeamFlag=="on"){
+        if(aStep->GetTrack()->GetKineticEnergy()==0) {
+          if(verboseLevel>0){
+            G4cout << G4endl
+		   << " *************************************************** " << G4endl
+		   << " * ActarSimROOTAnalysis::UserSteppingAction() " << G4endl
+		   << " * implantBeamFlag=on, primary particle (ion beam) " << G4endl
+		   << " * Implant at zVertex " << aStep->GetPreStepPoint()->GetPosition().z() << G4endl
+		   << " * Beam stopped in gas; moving to the decay section "<< G4endl;
+            G4cout << " *************************************************** "<< G4endl;
+	    }
+          pBeamInfo->SetXVertex(aStep->GetPreStepPoint()->GetPosition().x()/CLHEP::mm);
+          pBeamInfo->SetYVertex(aStep->GetPreStepPoint()->GetPosition().y()/CLHEP::mm);
+          pBeamInfo->SetZVertex(aStep->GetPreStepPoint()->GetPosition().z()/CLHEP::mm);
+          pBeamInfo->SetTimeVertex(aStep->GetTrack()->GetGlobalTime()/CLHEP::ns);
+	  
+	  // beam direction calculated by beam position at entrance and at vertex
+	  G4ThreeVector beamDirection(pBeamInfo->GetXVertex()-pBeamInfo->GetXEntrance(),
+				      pBeamInfo->GetYVertex()-pBeamInfo->GetYEntrance(),
+				      pBeamInfo->GetZVertex()-pBeamInfo->GetZEntrance());
+	  pBeamInfo->SetThetaVertex(beamDirection.theta());
+	  pBeamInfo->SetPhiVertex(beamDirection.phi());
+	
+          pBeamInfo->SetStatus(3);
+	  //No need of aborting event, as the ion has already lost its full energy
+          //G4RunManager::GetRunManager()->AbortEvent();
+	  GenerateBeam(); //Moved here from ActarSimPrimaryGeneratorAction
+        }
+      }
+      G4double zVertex = pBeamInfo->GetNextZVertex();
       if(aStep->GetPreStepPoint()->GetPosition().z() < zVertex &&
 	 aStep->GetPostStepPoint()->GetPosition().z() > zVertex){
-        const G4int verboseLevel = G4RunManager::GetRunManager()->GetVerboseLevel();
         if(verboseLevel>0){
           G4cout << G4endl
 		 << " *************************************************** " << G4endl
 		 << " * ActarSimROOTAnalysis::UserSteppingAction() " << G4endl
 		 << " * beamInteractionFlag=on, beam.Status=1, primary particle (ion beam) " << G4endl
 		 << " * zVertex at " << aStep->GetPreStepPoint()->GetPosition().z() << G4endl
-		 << " * aborting the present event and moving to "<< G4endl;
+		 << " * Aborting the present event and moving to reaction "<< G4endl;
           G4cout << " *************************************************** "<< G4endl;
         }
 	pBeamInfo->SetXVertex(aStep->GetPreStepPoint()->GetPosition().x()/CLHEP::mm);
@@ -687,16 +720,17 @@ void ActarSimROOTAnalysis::UserSteppingAction(const G4Step *aStep){
 	pBeamInfo->SetZVertex(aStep->GetPreStepPoint()->GetPosition().z()/CLHEP::mm);
 	pBeamInfo->SetEnergyVertex(aStep->GetTrack()->GetKineticEnergy()/CLHEP::MeV);
 	pBeamInfo->SetTimeVertex(aStep->GetTrack()->GetGlobalTime()/CLHEP::ns);
-
+	
         // beam direction calculated by beam position at entrance and at vertex, needed for Euler transformation
         G4ThreeVector beamDirection(pBeamInfo->GetXVertex()-pBeamInfo->GetXEntrance(),
                                     pBeamInfo->GetYVertex()-pBeamInfo->GetYEntrance(),
                                     pBeamInfo->GetZVertex()-pBeamInfo->GetZEntrance());
-
+	
         pBeamInfo->SetThetaVertex(beamDirection.theta());
         pBeamInfo->SetPhiVertex(beamDirection.phi());
-
+	
         pBeamInfo->SetStatus(2);
+	GenerateBeam(); //Moved here from ActarSimPrimaryGeneratorAction
         G4RunManager::GetRunManager()->AbortEvent();
       }
     }

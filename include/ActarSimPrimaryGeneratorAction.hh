@@ -58,6 +58,8 @@ private:
   //beam parameters
   G4double emittance;            ///< Beam emittance
   G4double beamRadiusAtEntrance; ///< Beam radius at the entrance point
+  G4double energyDispersion;     ///< Energy dispersion for the beam at the entrance
+  G4double energyDispersionType; ///< Energy dispersion type for the beam at the entrance: 0 flat, 1 gauss
 
   G4ThreeVector beamPosition;               ///< Beam position at the entrance
   G4ParticleMomentum beamMomentumDirection; ///< Beam (momentum) direction
@@ -71,6 +73,7 @@ private:
   G4double  randomPhiMax;         ///< Maximum random phi angle in CINE
 
   G4String  beamInteractionFlag;          ///< Flag for beam interaction mode
+  G4String  implantBeamFlag;              ///< Flag for beam implantation mode
   G4String  realisticBeamFlag;            ///< Flag for realistic beam interaction
   G4String  reactionFromEvGenFlag;        ///< Flag for a reaction taken from the tabulated Ev Generator
   G4String  reactionFromCrossSectionFlag; ///< Flag for a reaction taken from the Ev Generator+CINE
@@ -181,6 +184,7 @@ public:
   }
 
   void SetBeamInteractionFlag(G4String val) { beamInteractionFlag = val;}
+  void SetImplantBeamFlag(G4String val) { implantBeamFlag = val;}
 
   void SetRealisticBeamFlag(G4String val) { realisticBeamFlag = val;}
   void SetReactionFromFileFlag(G4String val) { reactionFromFileFlag = val;}
@@ -200,6 +204,11 @@ public:
   void SetBeamRadiusAtEntrance(G4double val){beamRadiusAtEntrance = val;}
   G4double GetEmittance(){return emittance;}
   G4double GetBeamRadiusAtEntrance(){return beamRadiusAtEntrance;}
+
+  void SetEnergyDispersion(G4double val){energyDispersion = val;}
+  void SetEnergyDispersionType(G4double val){energyDispersionType = val;}
+  G4double GetEnergyDispersion(){return energyDispersion;}
+  G4double GetEnergyDispersionType(){return energyDispersionType;}
 
   void SetParticleDefinition(G4ParticleDefinition * aParticleDefinition)
     { particleGun->SetParticleDefinition(aParticleDefinition);}

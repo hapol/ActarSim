@@ -74,9 +74,7 @@ private:
   ActarSimROOTAnalExogam* exoAnal;      ///< Pointer to detector specific (exogam) analysis class
 
   ActarSimBeamInfo* pBeamInfo;          ///< Pointer to beam information object
-
   ActarSimAnalysisMessenger* analMessenger;  ///< Pointer to the corresponding messenger
-
   ActarSimData* theData;             ///< Pointer to data object
 
   TH1D *hPrimTheta;              ///< Histogram of primary Theta angle
@@ -101,6 +99,7 @@ private:
   G4String  storeSimpleTracksFlag; ///< Flag to turn "on"/"off" the storage of simple tracks
   G4String  storeHistogramsFlag;   ///< Flag to turn "on"/"off" the storage of general histograms
   G4String  beamInteractionFlag;   ///< Flag to turn "on"/"off" the beam interaction analysis
+  G4String  implantBeamFlag;       ///< Flag to turn "on"/"off" the beam implantation mode
 
   G4int gasAnalIncludedFlag;     ///< Flag to turn on(1)/off(0) the gas chamber analysis
   G4int silAnalIncludedFlag;     ///< Flag to turn on(1)/off(0) the silicon analysis
@@ -154,6 +153,7 @@ public:
   void SetStoreSimpleTracksFlag(G4String val) {storeSimpleTracksFlag=val;};
   void SetStoreHistogramsFlag(G4String val) {storeHistogramsFlag=val;};
   void SetBeamInteractionFlag(G4String val){beamInteractionFlag=val;}
+  void SetImplantBeamFlag(G4String val){implantBeamFlag=val;}
 
   G4String GetStoreTracksFlag() {return storeTracksFlag;}
   G4String GetStoreTrackHistosFlag() {return storeTrackHistosFlag;}
@@ -161,6 +161,7 @@ public:
   G4String GetStoreSimpleTracksFlag() {return storeSimpleTracksFlag;}
   G4String GetStoreHistogramsFlag() {return storeHistogramsFlag;}
   G4String GetBeamInteractionFlag(){return beamInteractionFlag;}
+  G4String GetImplantBeamFlag(){return implantBeamFlag;}
 
   G4int GetGasAnalStatus(){return gasAnalIncludedFlag;}
   G4int GetSilAnalStatus(){return silAnalIncludedFlag;}
@@ -183,7 +184,7 @@ public:
   //void GeneratePrimaries(const G4Event*);
   void GeneratePrimaries(const G4Event*,G4double,G4double,G4double,G4double);
   void GeneratePrimaries(const G4Event *anEvent, ActarSimBeamInfo *beamInfo);
-  void GenerateBeam(const G4Event*);
+  void GenerateBeam(); //const G4Event*);
 
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
