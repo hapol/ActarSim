@@ -58,7 +58,7 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
+//#include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -157,31 +157,32 @@ void PhysListEmStandard::ConstructProcess()
   // Main options and setting parameters are shown here.
   // Several of them have default values.
   //
-  G4EmProcessOptions emOptions;
+  //OBSOLETE in G4.11
+  //G4EmProcessOptions emOptions;
 
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default
-  emOptions.SetMaxEnergy(100*TeV);	//default
-  emOptions.SetDEDXBinning(12*20);	//default=12*7
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
-  emOptions.SetSplineFlag(true);	//default
+  //emOptions.SetMinEnergy(100*eV);	//default
+  //emOptions.SetMaxEnergy(100*TeV);	//default
+  //emOptions.SetDEDXBinning(12*20);	//default=12*7
+  //emOptions.SetLambdaBinning(12*20);	//default=12*7
+  //emOptions.SetSplineFlag(true);	//default
 
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
-  emOptions.SetMscRangeFactor(0.04);	//default
-  emOptions.SetMscGeomFactor (2.5);	//default
-  emOptions.SetSkin(3.);		//default
+  //emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  //emOptions.SetMscRangeFactor(0.04);	//default
+  //emOptions.SetMscGeomFactor (2.5);	//default
+  //emOptions.SetSkin(3.);		//default
 
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)
-  emOptions.SetLinearLossLimit(1.e-2);		//default
+  //emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)
+  //emOptions.SetLinearLossLimit(1.e-2);		//default
 
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default
+  //emOptions.SetSubCutoff(false);	//default
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

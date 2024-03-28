@@ -60,7 +60,7 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
+//#include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,12 +176,12 @@ void PhysListEmStandardWVI::ConstructProcess()
   //
   // Main options and setting parameters are shown here.
   // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
+  // OBSOLETE IN G4.11
+  //G4EmProcessOptions emOptions;
 
   //multiple coulomb scattering
   //
-  emOptions.SetPolarAngleLimit(0.2);
+  //emOptions.SetPolarAngleLimit(0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

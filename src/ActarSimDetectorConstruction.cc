@@ -392,7 +392,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPC() {
   }
   
   //visibility
-  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLog->SetVisAttributes (G4VisAttributes::GetInvisible());
   
   return worldPhys;
 }
@@ -631,7 +631,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructActarTPCDEMO() {
   }
   
   //visibility
-  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLog->SetVisAttributes (G4VisAttributes::GetInvisible());
   
   return worldPhys;
 }
@@ -759,7 +759,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructSpecMAT() {
   }
   
   //visibility
-  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLog->SetVisAttributes (G4VisAttributes::GetInvisible());
 
   return worldPhys;
 }
@@ -915,7 +915,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructMAIKO() {
   }
   
   //visibility
-  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLog->SetVisAttributes (G4VisAttributes::GetInvisible());
   
   return worldPhys;
 }
@@ -1017,7 +1017,7 @@ G4VPhysicalVolume* ActarSimDetectorConstruction::ConstructOthers() {
   }
   
   //visibility
-  worldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLog->SetVisAttributes (G4VisAttributes::GetInvisible());
   
   return worldPhys;
 }

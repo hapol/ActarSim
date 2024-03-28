@@ -4,7 +4,7 @@
 # It has no effect with G4UIterminal.
 #
 # File :
-/gui/addMenu g4file G4File
+#/gui/addMenu g4file G4File
 /gui/addButton g4file vis_actarTPCDEMO "/control/execute vis_actarTPCDEMO.mac"
 /gui/addButton g4file vis_actarTPC "/control/execute vis_actarTPC.mac"
 /gui/addButton g4file vis_SpecMAT "/control/execute vis_SpecMAT.mac"

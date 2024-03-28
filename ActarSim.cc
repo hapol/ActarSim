@@ -21,7 +21,7 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
-#include "G4UIQt.hh"
+//#include "G4UIQt.hh"
 
 #ifdef G4UI_USE_ROOT
 #include "G4UIRoot.hh"

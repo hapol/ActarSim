@@ -39,7 +39,7 @@
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
+//#include "G4EmProcessOptions.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -277,11 +277,12 @@ void ActarSimPhysicsList::ConstructProcess() {
     emPhysicsList->ConstructProcess();
   }
   // Define energy interval for loss processes
-  G4EmProcessOptions emOptions;
-  emOptions.SetMinEnergy(0.1*keV);
-  emOptions.SetMaxEnergy(100.*GeV);
-  emOptions.SetDEDXBinning(90);
-  emOptions.SetLambdaBinning(90);
+  //OBSOLETE IN G4.11
+  //G4EmProcessOptions emOptions;
+  //emOptions.SetMinEnergy(0.1*keV);
+  //emOptions.SetMaxEnergy(100.*GeV);
+  //emOptions.SetDEDXBinning(90);
+  //emOptions.SetLambdaBinning(90);
   //emOptions.SetBuildPreciseRange(false);
   //emOptions.SetApplyCuts(true);
   //emOptions.SetVerbose(0);
